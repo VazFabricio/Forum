@@ -7,6 +7,7 @@
 <ul class="flex items-center space-x-4">
     @if (SignInManager.IsSignedIn(User))
     {
+        <a class="nav-link text-dark" asp-area="" asp-controller="Community" asp-action="Index">Comunidades</a>
         <a class="nav-link text-dark" asp-area="" asp-controller="Publication" asp-action="Index">Publicações</a>
         <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @ViewData["UserName"] !</a>

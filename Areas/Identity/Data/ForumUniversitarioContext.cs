@@ -14,7 +14,8 @@ public class ForumUniversitarioContext : IdentityDbContext<ForumUniversitarioUse
     }
 
     public DbSet<Publication> PUBLICATION { get; set; }
-    
+
+    public DbSet<Community> COMMUNITY { get; set; }
 
     public async Task<bool> IsUserNameUnique(string userName)
     {

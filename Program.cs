@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ForumUniversitario.Data;
 using ForumUniversitario.Areas.Identity.Data;
+using ForumUniversitario.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ForumUniversitarioContextConnection") ?? throw new InvalidOperationException("Connection string 'ForumUniversitarioContextConnection' not found.");
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<ForumUniversitarioContext>(options =>
 
 builder.Services.AddDefaultIdentity<ForumUniversitarioUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ForumUniversitarioContext>();
+
+builder.Services.AddScoped<PublicationModel>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
