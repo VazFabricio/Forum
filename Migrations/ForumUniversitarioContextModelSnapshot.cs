@@ -3,7 +3,6 @@ using System;
 using ForumUniversitario.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,10 +10,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumUniversitario.Migrations
 {
     [DbContext(typeof(ForumUniversitarioContext))]
-    [Migration("20230801115638_AlterName")]
-    partial class AlterName
+    partial class ForumUniversitarioContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,10 +91,69 @@ namespace ForumUniversitario.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ForumUniversitario.Entidades.Community", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("COMMUNITY");
+                });
+
+            modelBuilder.Entity("ForumUniversitario.Entidades.Membership", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommunityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("controlLevel")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MEMBERSHIP");
+                });
+
             modelBuilder.Entity("ForumUniversitario.Entidades.Publication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommunityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -115,6 +172,8 @@ namespace ForumUniversitario.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
 
                     b.HasIndex("UserId");
 
@@ -253,13 +312,51 @@ namespace ForumUniversitario.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ForumUniversitario.Entidades.Publication", b =>
+            modelBuilder.Entity("ForumUniversitario.Entidades.Community", b =>
                 {
                     b.HasOne("ForumUniversitario.Areas.Identity.Data.ForumUniversitarioUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ForumUniversitario.Entidades.Membership", b =>
+                {
+                    b.HasOne("ForumUniversitario.Entidades.Community", "Community")
+                        .WithMany("Memberships")
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ForumUniversitario.Areas.Identity.Data.ForumUniversitarioUser", "User")
+                        .WithMany("Memberships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Community");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ForumUniversitario.Entidades.Publication", b =>
+                {
+                    b.HasOne("ForumUniversitario.Entidades.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ForumUniversitario.Areas.Identity.Data.ForumUniversitarioUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Community");
 
                     b.Navigation("User");
                 });
@@ -313,6 +410,16 @@ namespace ForumUniversitario.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ForumUniversitario.Areas.Identity.Data.ForumUniversitarioUser", b =>
+                {
+                    b.Navigation("Memberships");
+                });
+
+            modelBuilder.Entity("ForumUniversitario.Entidades.Community", b =>
+                {
+                    b.Navigation("Memberships");
                 });
 #pragma warning restore 612, 618
         }

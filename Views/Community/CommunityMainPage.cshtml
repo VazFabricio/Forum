@@ -1,0 +1,77 @@
+﻿@model ForumUniversitario.Models.CommunityModel
+
+@{
+    ViewData["Title"] = "CommunityMainPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes da Comunidade @ViewData["CommunityName"]</h2>
+
+<p><strong>Descrição:</strong> @ViewData["CommunityDesc"]</p>
+<p><strong>Data de Criação:</strong> @ViewData["CommunityCreatedAt"]</p>
+
+@{
+    // Generate the link to the Create action in the PublicationController and include the community ID as a route value
+    var createPublicationLink = Url.Action("Create", "Publication", new { communityId = ViewData["CommunityId"] });
+}
+
+<p>
+    <a href="@createPublicationLink" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a>
+</p>
+
+<div id="followButtonContainer">
+    @if (User.Identity.IsAuthenticated)
+    {
+        @if (ViewData["IsFollowing"] as bool? == true)
+        {
+            <p>Você está seguindo esta comunidade.</p>
+        }
+        else
+        {
+            <button id="followButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Seguir</button>
+        }
+    }
+    else
+    {
+        <p>Para seguir esta comunidade, faça login.</p>
+    }
+</div>
+
+    
+
+
+<div class="grid grid-cols-12 gap-4">
+    <div class="col-span-2">
+        <div class="bg-gray-200 p-4 rounded mt-4">
+            <h3 class="text-lg font-bold">Top 3 Usuários com Mais Postagens</h3>
+            <ul class="mt-2">
+                <!--Espaço para usuarios com mais publicações na comunidade-->
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-span-8">
+        <div class="timeline">
+            <!-- Loop through the list of publications from the CommunityModel -->
+            @foreach (var publicacao in Model.Publications)
+            {
+                <div class="bg-white p-4 rounded shadow mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <p><strong>@publicacao.User.AccountName</strong></p>
+                        <p class="text-gray-500">@publicacao.CreatedAt</p>
+                    </div>
+                    <h3 class="text-lg font-bold">@publicacao.Title</h3>
+                    <p class="mt-2">@publicacao.Content</p>
+                </div>
+}   
+        </div>
+    </div>
+
+    <div class="col-span-2">
+        <!-- Espaço para anúncios -->
+        <div class="bg-yellow-200 p-4 rounded">
+            <h3 class="text-lg font-bold">Anúncios</h3>
+            <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p>
+        </div>
+    </div>
+</div>
