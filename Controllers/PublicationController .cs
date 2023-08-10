@@ -39,10 +39,11 @@ namespace ForumUniversitario.Controllers
             return View(publicacoes);
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int? communityId)
         {
             string userId = _userManager.GetUserId(this.User);
             ViewData["UserID"] = userId;
+            //ViewData["CommunityId"] = communityId;
 
             return View();
         }

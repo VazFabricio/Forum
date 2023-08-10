@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ForumUniversitario.Data;
 using ForumUniversitario.Areas.Identity.Data;
 using ForumUniversitario.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ForumUniversitarioContextConnection") ?? throw new InvalidOperationException("Connection string 'ForumUniversitarioContextConnection' not found.");
@@ -14,6 +15,9 @@ builder.Services.AddDefaultIdentity<ForumUniversitarioUser>(options => options.S
     .AddEntityFrameworkStores<ForumUniversitarioContext>();
 
 builder.Services.AddScoped<PublicationModel>();
+builder.Services.AddScoped<CommunityModel>();
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -42,5 +46,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "community",
+        pattern: "community/{id}",
+        defaults: new { controller = "Community", action = "CommunityMainPage" });
+    endpoints.MapDefaultControllerRoute();
+});
+
 
 app.Run();

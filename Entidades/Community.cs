@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ForumUniversitario.Areas.Identity.Data;
-
-using ForumUniversitario.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -32,6 +30,9 @@ public class Community
     
      // Referência ao usuário que criou a comunidade
      public ForumUniversitarioUser User { get; set; }
-    
+
+
+    public ICollection<Membership> Memberships { get; set; }
+
 
 }

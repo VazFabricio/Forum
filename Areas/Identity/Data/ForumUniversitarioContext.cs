@@ -17,6 +17,8 @@ public class ForumUniversitarioContext : IdentityDbContext<ForumUniversitarioUse
 
     public DbSet<Community> COMMUNITY { get; set; }
 
+    public DbSet<Membership> MEMBERSHIP { get; set; }
+
     public async Task<bool> IsUserNameUnique(string userName)
     {
         // Realiza a consulta no banco de dados para verificar se o nome de usuário já existe

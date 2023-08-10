@@ -1,4 +1,5 @@
 ﻿using ForumUniversitario.Areas.Identity.Data;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Xunit.Sdk;
 
@@ -24,4 +25,5 @@ namespace ForumUniversitario.Entidades
 
 
     }
+
 }

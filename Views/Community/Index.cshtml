@@ -20,7 +20,9 @@
                 {
                     <div class="bg-white p-4 rounded shadow mb-4">
                         <div class="flex items-center justify-between mb-2">
-                            <p><strong>@community.Name</strong></p>
+                            <a href="/community/@community.Id">
+                                <p><strong>@community.Name</strong></p>
+                            </a>
                             <p class="text-gray-500">@community.CreatedAt.ToString("dd/MM/yyyy")</p>
                         </div>
                         <p class="community-description mt-2">@community.Description</p>

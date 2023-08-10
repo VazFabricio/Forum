@@ -125,9 +125,21 @@ namespace ForumUniversitario.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
                 
+                
+                var isAccountNameUnique = await _userManager.Users.AllAsync(u => u.AccountName != Input.AccountName);
+                if (!isAccountNameUnique)
+                {
+                    ModelState.AddModelError(string.Empty, "O nome já está em uso. Por favor, escolha outro.");
+                    return Page();
+                }
+                var user = CreateUser();
+
                 user.AccountName = Input.AccountName;
+                
+
+
+                
                 user.CreatedAt = DateTime.Now; 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
