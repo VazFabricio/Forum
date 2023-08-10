@@ -54,6 +54,11 @@ app.UseEndpoints(endpoints =>
         name: "community",
         pattern: "community/{id}",
         defaults: new { controller = "Community", action = "CommunityMainPage" });
+
+    endpoints.MapControllerRoute(
+        name: "api",
+        pattern: "api/{controller}/{action}/{id?}"); // Adicione esse endpoint para a API
+
     endpoints.MapDefaultControllerRoute();
 });
 
