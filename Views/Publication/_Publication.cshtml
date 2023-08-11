@@ -15,6 +15,7 @@
                 <ul class="mt-2">
                     @foreach (var userGroup in Model.GroupBy(p => p.UserId).OrderByDescending(g => g.Count()).Take(3))
                     {
+                        //alterar para que esses usuários sejam armazenados no controller para aliviar o frontend.
                         var user = userGroup.First().User;
                         <li>@user.UserName - @userGroup.Count() postagens</li>
                     }

@@ -2,6 +2,7 @@ using ForumUniversitario.Areas.Identity.Data;
 using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using ForumUniversitario.Models;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,13 +40,23 @@ public class CommunityController : Controller
         collection.UserId = _userManager.GetUserId(this.User);
         collection.CreatedAt = DateTime.Now;
 
+        string communiTyName = collection.Name;
 
+        // Verificar se o nome da comunidade já existe
+        bool isCommunityNameUnique = !db.COMMUNITY.Any(u => u.Name == communiTyName);
+
+        if (!isCommunityNameUnique)
+        {
+            ModelState.AddModelError("Name", "Já existe uma comunidade com este nome.");
+            return View(collection);
+        }
 
         db.COMMUNITY.Add(collection);
         db.SaveChanges();
         return RedirectToAction("Index");
     }
-
+    
+    
     public IActionResult CommunityMainPage(int id)
     {
         var community = db.COMMUNITY.FirstOrDefault(c => c.Id == id);
@@ -68,23 +79,20 @@ public class CommunityController : Controller
 
         ViewData["UserId"] = userId;
 
-        // Check if the user is already following the community
-        bool isFollowing = _communityModel.IsUserFollowing(userId, id);
-        ViewData["IsFollowing"] = isFollowing;
-
-
-        if (!isFollowing)
-        {
-            // If not following, follow the community
-            _communityModel.FollowCommunity(userId, id);
-        }
-
+        ViewData["IsFollowing"] = _communityModel.IsUserFollowing(userId, id);
         
-
-
+        
         // Pass the CommunityModel to the view
         return View(_communityModel);
     }
 
+    [HttpPost]
+    public IActionResult FollowCommunityFromButton(int id)
+    {
+        string userId = _userManager.GetUserId(this.User);
+        _communityModel.FollowCommunity(userId, id);
+
+        return RedirectToAction("CommunityMainPage", new { id });
+    }
 
 }

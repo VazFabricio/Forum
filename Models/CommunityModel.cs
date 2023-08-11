@@ -33,26 +33,29 @@ public class CommunityModel : Community
     }
 
     public void FollowCommunity(string userId, int communityId)
-
-
     {
-
-        // Verificar se o usu�rio j� est� seguindo a comunidade
+        // Verificar se o usuário já está seguindo a comunidade
         if (!IsUserFollowing(userId, communityId))
         {
+            // Mensagem de depuração
+            Console.WriteLine($"Seguindo a comunidade {communityId}");
+
             Membership membership = new Membership
             {
                 UserId = userId,
                 CommunityId = communityId,
                 JoinDate = DateTime.Now,
-                controlLevel = 1 // Defina o n�vel de controle adequado aqui
+                controlLevel = 1 // Defina o nível de controle adequado aqui
             };
 
             db.MEMBERSHIP.Add(membership);
             db.SaveChanges();
-
         }
-
+        else
+        {
+            // Mensagem de depuração
+            Console.WriteLine($"Usuário já segue a comunidade {communityId}");
+        }
     }
 
     public bool IsUserFollowing(string userId, int communityId)

@@ -20,9 +20,7 @@ namespace ForumUniversitario.Models
 
         public bool IsCommunityIdValid(int communityId)
         {
-            // Aqui você precisa acessar o banco de dados e verificar se a comunidade existe
-            // Retorne true se existir e false se não existir
-            // Por exemplo:
+
             var community = db.COMMUNITY.Find(communityId);
             return community != null;
         }

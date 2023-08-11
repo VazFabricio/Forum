@@ -1,6 +1,7 @@
 ﻿using ForumUniversitario.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Xunit.Sdk;
 
 namespace ForumUniversitario.Entidades
@@ -21,6 +22,9 @@ namespace ForumUniversitario.Entidades
 
         [Required(ErrorMessage = "Selecione uma comunidade.")]
         public int CommunityId { get; set; }
+        
+        [NotMapped]
+        public string CommunityName { get; set; }
         public Community Community { get; set; }
 
 
