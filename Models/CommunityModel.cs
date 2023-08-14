@@ -58,8 +58,37 @@ public class CommunityModel : Community
         }
     }
 
+    
+    public void UnfollowCommunity(string userId, int communityId)
+    {
+        // Verificar se o usuário já está seguindo a comunidade
+        if (IsUserFollowing(userId, communityId))
+        {
+            // Mensagem de depuração
+            Console.WriteLine($"Deixar de seguir a comunidade {communityId}");
+
+            var membership = db.MEMBERSHIP.SingleOrDefault(m => m.UserId == userId && m.CommunityId == communityId);
+
+            int membershipId = membership.Id;
+
+            db.MEMBERSHIP.Remove(membership);
+            db.SaveChanges();
+        }
+        else
+        {
+            // Mensagem de depuração
+            Console.WriteLine($"Usuário não segue a comunidade {communityId}");
+        }
+    }
+
     public bool IsUserFollowing(string userId, int communityId)
     {
         return db.MEMBERSHIP.Any(m => m.UserId == userId && m.CommunityId == communityId);
+    }
+
+    public string GetCommunityNameById(int communityId)
+    {
+        var community = db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
+        return community != null ? community.Name : null;
     }
 }

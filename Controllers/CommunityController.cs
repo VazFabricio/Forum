@@ -73,6 +73,7 @@ public class CommunityController : Controller
         ViewData["CommunityDesc"] = community.Description;
         ViewData["CommunityCreatedAt"] = community.CreatedAt.ToString("dd/MM/yyyy");
         ViewData["CommunityId"] = community.Id;
+        
 
         // Get the current user's ID
         string userId = _userManager.GetUserId(this.User);
@@ -91,6 +92,15 @@ public class CommunityController : Controller
     {
         string userId = _userManager.GetUserId(this.User);
         _communityModel.FollowCommunity(userId, id);
+
+        return RedirectToAction("CommunityMainPage", new { id });
+    }
+
+    [HttpPost]
+    public IActionResult UnfollowCommunityFromButton(int id)
+    {
+        string userId = _userManager.GetUserId(this.User);
+        _communityModel.UnfollowCommunity(userId, id);
 
         return RedirectToAction("CommunityMainPage", new { id });
     }

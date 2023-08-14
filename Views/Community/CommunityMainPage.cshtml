@@ -24,13 +24,16 @@
     {
         @if (ViewData["IsFollowing"] as bool? == true)
         {
-            <p>Você está seguindo esta comunidade.</p>
+            <form asp-controller="Community" asp-action="UnfollowCommunityFromButton" method="post">
+                <input type="hidden" name="id" value="@ViewData["CommunityId"]" />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Unfollow</button>
+            </form>
         }
         else
         {
             <form asp-controller="Community" asp-action="FollowCommunityFromButton" method="post">
                 <input type="hidden" name="id" value="@ViewData["CommunityId"]" />
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Seguir</button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Follow</button>
             </form>
         }
     }

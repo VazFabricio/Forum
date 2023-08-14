@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h1>Create</h1>
@@ -26,9 +27,17 @@
 
             <div class="form-group">
                 <label asp-for="CommunityName" class="control-label"></label>
-                <input asp-for="CommunityName" class="form-control" />
+                @if (string.IsNullOrEmpty(ViewData["CommunityName"].ToString()))
+                {
+                    <input asp-for="CommunityName" class="form-control" />
+                }
+                else
+                {
+                    <input asp-for="CommunityName" class="form-control" value="@ViewData["CommunityName"]" readonly />
+                }
                 <span asp-validation-for="CommunityName" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -46,3 +55,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
