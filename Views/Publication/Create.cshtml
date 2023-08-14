@@ -27,7 +27,7 @@
 
             <div class="form-group">
                 <label asp-for="CommunityName" class="control-label"></label>
-                @if (string.IsNullOrEmpty(ViewData["CommunityName"].ToString()))
+                @if (string.IsNullOrEmpty(ViewData["CommunityName"] as string))
                 {
                     <input asp-for="CommunityName" class="form-control" />
                 }

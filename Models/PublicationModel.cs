@@ -41,6 +41,25 @@ namespace ForumUniversitario.Models
             return null; // Retorna null caso a publicação não seja encontrada
         }
 
+        public bool isAbleToPost(string userId) 
+        {
+            var lastPost = db.PUBLICATION.Where(p => p.UserId == userId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
+
+            if (lastPost != null)
+            {
+                // Verificar se já se passaram 30 segundos
+                TimeSpan elapsedTime = DateTime.Now - lastPost.CreatedAt;
+                if (elapsedTime.TotalSeconds < 30)
+                {     
+                    return false;
+                }
+
+                return true;
+            }
+
+            return true;
+        }
+
 
     }
 

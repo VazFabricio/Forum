@@ -96,9 +96,13 @@ namespace ForumUniversitario.Controllers
                 return View(collection);
             }
 
+            bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User));
 
-
-            
+            if (!isAbleToPost)
+            {
+                ModelState.AddModelError("", "Aguarde pelo menos 30 segundos antes de fazer outra postagem.");
+                return View(collection);
+            }
 
 
             db.PUBLICATION.Add(collection);
