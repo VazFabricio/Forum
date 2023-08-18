@@ -67,31 +67,34 @@ namespace ForumUniversitario.Controllers
         [HttpPost]
         public IActionResult Create(Publication collection)
         {
+            var errors = new List<string>();
 
-            // Verificar se a comunidade existe pelo nome
             var community = _publicationModel.GetCommunityByName(collection.CommunityName);
 
             if (community == null)
             {
-                ModelState.AddModelError("CommunityName", "A comunidade informada não existe.");
-                return View(collection);
+                errors.Add("A comunidade informada não existe.");
             }
 
-            //Verifica se o User segue a comunidade que ele digitou
-            bool isUserFollowing = _communityModel.IsUserFollowing(_userManager.GetUserId(this.User), community.Id);
-
-            if (!isUserFollowing)
+            if (community!=null)
             {
-                ModelState.AddModelError("CommunityName", "Você não segue a comunidade.");
-                return View(collection);
+                bool isUserFollowing = _communityModel.IsUserFollowing(_userManager.GetUserId(this.User), community.Id);
+                if (!isUserFollowing)
+                {
+                    errors.Add("Você não segue a comunidade.");
+                }
             }
-
+            
             bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User), 30);
 
             if (!isAbleToPost)
             {
-                ModelState.AddModelError("", "Aguarde pelo menos 30 segundos antes de fazer outra postagem.");
-                return View(collection);
+                errors.Add("Aguarde pelo menos 30 segundos antes de fazer outra postagem.");
+            }
+
+            if (errors.Count > 0)
+            {
+                return BadRequest(new { errors });
             }
 
             _publicationModel.SavePublication(collection, community.Id, _userManager.GetUserId(this.User));

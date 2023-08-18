@@ -1,18 +1,13 @@
 ﻿@model ForumUniversitario.Entidades.Publication
 
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
+    Layout = null;
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
-
-<h1>Create</h1>
-
-<h4>Publication</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form id="publicationForm"  asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -40,19 +35,50 @@
 
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" id="submitButton" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div id="errorModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Erros de Validação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="errorList"></ul> <!-- Aqui é onde os erros serão exibidos -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-
+<script>
+$("#publicationForm").submit(function (e) {
+    e.preventDefault();
+     console.log("Form submit is being processed.");
+    $.ajax({
+        url: "/Publication/Create",
+        method: "POST",
+        data: $(this).serialize(),
+        success: function (data) {
+            // Sucesso
+            window.location.href = "/"; // Redirecionar após o sucesso
+        },
+        error: function (xhr) {
+            if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.length > 0) {
+                var errorList = xhr.responseJSON.errors.map(error => `<li>${error}</li>`).join('');
+                $("#errorList").html(errorList);
+                $("#errorModal").modal("show");
+            }
+        }
+    });
+});
+</script>
