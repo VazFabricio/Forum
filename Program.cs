@@ -16,7 +16,7 @@ builder.Services.AddDefaultIdentity<ForumUniversitarioUser>(options => options.S
 
 builder.Services.AddScoped<PublicationModel>();
 builder.Services.AddScoped<CommunityModel>();
-
+builder.Services.AddScoped<CommentModel>();
 
 
 // Add services to the container.
@@ -56,9 +56,14 @@ app.UseEndpoints(endpoints =>
         defaults: new { controller = "Community", action = "CommunityMainPage" });
 
     endpoints.MapControllerRoute(
+        name: "createComment",
+        pattern: "Comment/Create/{publicationId}",
+        defaults: new { controller = "Comment", action = "Create" });
+
+    endpoints.MapControllerRoute(
         name: "api",
         pattern: "api/{controller}/{action}/{id?}"); // Adicione esse endpoint para a API
-
+    
     endpoints.MapDefaultControllerRoute();
 });
 

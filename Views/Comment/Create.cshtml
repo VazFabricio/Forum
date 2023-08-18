@@ -1,0 +1,64 @@
+﻿@model ForumUniversitario.Entidades.Comment
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <input asp-for="Content" class="form-control" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            
+            
+            <div class="form-group">
+                
+                @if ((ViewData["FatherCommentId"] == null))
+                {
+                    
+                }
+                else
+                {
+                    <label asp-for="ParentId" class="control-label hidden"></label>
+                    <input asp-for="ParentId" class="form-control hidden" value="@ViewData["FatherCommentId"]" readonly />
+                }
+                <span asp-validation-for="ParentId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group hidden">
+                <label asp-for="PublicationId" class="control-label"></label>
+                @if ((ViewData["PublicationID"] == null))
+                {
+                    <input asp-for="PublicationId" class="form-control" />
+                }
+                else
+                {
+                    <input asp-for="PublicationId" class="form-control" value="@ViewData["PublicationId"]" readonly />
+                }
+                <span asp-validation-for="PublicationId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

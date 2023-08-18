@@ -15,14 +15,13 @@ public class CommunityModel : Community
     private readonly UserManager<ForumUniversitarioUser> _userManager;
     private readonly ForumUniversitarioContext db;
 
-    public List<Publication> Publications { get; set; }
-
     public CommunityModel(ForumUniversitarioContext contexto)
     {
         db = contexto;
         Publications = new List<Publication>();
     }
 
+    public List<Publication> Publications { get; set; }
     public List<Publication> GetPublicationsForCommunity(int communityId)
     {
         Publications = db.PUBLICATION
@@ -31,6 +30,27 @@ public class CommunityModel : Community
     .ToList();
         return Publications;
     }
+
+    public List<Community> GetAllCommunities () 
+    {
+        return db.COMMUNITY.ToList();
+    }
+    public void SaveCommunity(Community community, string UserId) 
+    {
+        community.UserId = UserId;
+        community.CreatedAt = DateTime.Now;
+
+
+        db.COMMUNITY.Add(community);
+        db.SaveChanges();
+
+    }
+    public bool IsCommunityNameUnique(string communiTyName) 
+    {
+        bool isCommunityNameUnique = !db.COMMUNITY.Any(u => u.Name == communiTyName);
+        return isCommunityNameUnique;
+    }
+
 
     public void FollowCommunity(string userId, int communityId)
     {
@@ -86,9 +106,9 @@ public class CommunityModel : Community
         return db.MEMBERSHIP.Any(m => m.UserId == userId && m.CommunityId == communityId);
     }
 
-    public string GetCommunityNameById(int communityId)
+    public Community GetCommunityById(int? communityId)
     {
-        var community = db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
-        return community != null ? community.Name : null;
+            return db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
     }
+
 }

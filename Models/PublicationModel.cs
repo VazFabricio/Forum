@@ -3,7 +3,9 @@ using ForumUniversitario.Controllers;
 using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.X86;
 
 namespace ForumUniversitario.Models
 {
@@ -13,43 +15,31 @@ namespace ForumUniversitario.Models
         private readonly UserManager<ForumUniversitarioUser> _userManager;
         private readonly ForumUniversitarioContext db;
 
+
         public PublicationModel(ForumUniversitarioContext contexto)
         {
             db = contexto;
         }
 
-        public bool IsCommunityIdValid(int communityId)
+        public List<Publication> getPublications()
         {
+            var publications =
+                db.PUBLICATION.Include(p => p.User).Include(p => p.Community)
+                    .ToList();
 
-            var community = db.COMMUNITY.Find(communityId);
-            return community != null;
+            return publications;
         }
 
-        public string GetCommunityName(int publicationId)
+        public bool isAbleToPost(string userId, int SecondsBetweenPosts) 
         {
-            var publication = db.PUBLICATION
-                .Where(p => p.Id == publicationId)
-                .FirstOrDefault();
-
-            if (publication != null)
-            {
-                // Certifique-se de que a propriedade Community esteja carregada corretamente
-                db.Entry(publication).Reference(p => p.Community).Load();
-                return publication.Community?.Name; // Retorna o nome da comunidade
-            }
-
-            return null; // Retorna null caso a publicação não seja encontrada
-        }
-
-        public bool isAbleToPost(string userId) 
-        {
+            
             var lastPost = db.PUBLICATION.Where(p => p.UserId == userId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
 
             if (lastPost != null)
             {
                 // Verificar se já se passaram 30 segundos
                 TimeSpan elapsedTime = DateTime.Now - lastPost.CreatedAt;
-                if (elapsedTime.TotalSeconds < 30)
+                if (elapsedTime.TotalSeconds < SecondsBetweenPosts)
                 {     
                     return false;
                 }
@@ -60,6 +50,40 @@ namespace ForumUniversitario.Models
             return true;
         }
 
+        public Community GetCommunityByName(string communityName)
+        {
+            return db.COMMUNITY.FirstOrDefault(c => c.Name == communityName);
+        }
+
+        public void SavePublication(Publication publication, int communityId, string UserId)
+        {
+            publication.UserId = UserId;
+            publication.CreatedAt = DateTime.Now;
+            publication.CommunityId = communityId;
+
+            db.PUBLICATION.Add(publication);
+            db.SaveChanges();
+        }
+
+        public Publication GetPublicationById(int? id)
+        {
+            return db.PUBLICATION.FirstOrDefault(p => p.Id == id);
+        }
+
+
+
+        public ForumUniversitarioUser GetUserByPublicationId(int publicationId)
+                 {
+                     var publication = db.PUBLICATION
+                         .Include(p => p.User) // Carrega informações do usuário
+                         .FirstOrDefault(p => p.Id == publicationId);
+         
+                     if (publication != null)
+                     {
+                         return publication.User;
+                     }
+                     return null;
+                 }
 
     }
 

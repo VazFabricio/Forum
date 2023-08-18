@@ -17,7 +17,7 @@ namespace ForumUniversitario.Entidades
         public string Title { get; set; }
 
         [Required]
-        [StringLength(300, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+        [StringLength(1000, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
         public string Content { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -25,6 +25,8 @@ namespace ForumUniversitario.Entidades
         // Propriedade que representa o relacionamento com o usuário
         public string UserId { get; set; }
 
+        [NotMapped]
+        public string UserName { get; set; }
         public ForumUniversitarioUser User { get; set; }
 
         [Required(ErrorMessage = "Selecione uma comunidade.")]

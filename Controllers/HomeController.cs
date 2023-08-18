@@ -11,13 +11,13 @@ namespace ForumUniversitario.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ForumUniversitarioUser> _userManager;
-        private readonly ForumUniversitarioContext db;
+
 
         public HomeController(ILogger<HomeController> logger, UserManager<ForumUniversitarioUser> userManager, ForumUniversitarioContext contexto)
         {
             _logger = logger;
             this._userManager = userManager;
-            db = contexto;
+
         }
 
         public IActionResult Index()

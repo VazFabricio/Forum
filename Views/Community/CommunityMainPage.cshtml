@@ -12,7 +12,7 @@
 
 @{
     // Generate the link to the Create action in the PublicationController and include the community ID as a route value
-    var createPublicationLink = Url.Action("Create", "Publication", new { communityId = ViewData["CommunityId"] });
+    var createPublicationLink = Url.Action("Create", "Publication", new { communityId = @ViewData["CommunityId"] });
 }
 
 <p>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="col-span-8">
-        <div class="timeline">
+        <div class="timeline mt-4">
             <!-- Loop through the list of publications from the CommunityModel -->
             @foreach (var publicacao in Model.Publications)
             {
@@ -64,7 +64,9 @@
                         <p><strong>@publicacao.User.AccountName</strong></p>
                         <p class="text-gray-500">@publicacao.CreatedAt</p>
                     </div>
-                    <h3 class="text-lg font-bold">@publicacao.Title</h3>
+                    <h3 class="text-lg font-bold">
+                        <a asp-controller="Publication" asp-action="Details" asp-route-id="@publicacao.Id">@publicacao.Title</a>
+                    </h3>
                     <p class="mt-2">@publicacao.Content</p>
                 </div>
 }   
@@ -73,7 +75,7 @@
 
     <div class="col-span-2">
         <!-- Espaço para anúncios -->
-        <div class="bg-yellow-200 p-4 rounded">
+        <div class="bg-yellow-200 p-4 rounded mt-4">
             <h3 class="text-lg font-bold">Anúncios</h3>
             <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p>
         </div>

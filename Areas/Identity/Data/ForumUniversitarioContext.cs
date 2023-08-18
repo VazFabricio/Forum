@@ -19,6 +19,8 @@ public class ForumUniversitarioContext : IdentityDbContext<ForumUniversitarioUse
 
     public DbSet<Membership> MEMBERSHIP { get; set; }
 
+    public DbSet<Comment> COMMENT { get; set; }
+
     public async Task<bool> IsUserNameUnique(string userName)
     {
         // Realiza a consulta no banco de dados para verificar se o nome de usuário já existe
@@ -33,4 +35,7 @@ public class ForumUniversitarioContext : IdentityDbContext<ForumUniversitarioUse
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+
+    public DbSet<ForumUniversitario.Entidades.Comment>? Comment { get; set; }
 }

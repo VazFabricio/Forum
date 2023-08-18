@@ -10,14 +10,13 @@ namespace ForumUniversitario.Controllers;
 
 public class CommunityController : Controller
 {
-    private readonly ForumUniversitarioContext db;
+
     private readonly ILogger<HomeController> _logger;
     private readonly UserManager<ForumUniversitarioUser> _userManager;
     private readonly CommunityModel _communityModel;
 
-    public CommunityController(ForumUniversitarioContext context, UserManager<ForumUniversitarioUser> userManager, CommunityModel communityModel)
+    public CommunityController(UserManager<ForumUniversitarioUser> userManager, CommunityModel communityModel)
     {
-        db = context;
         this._userManager = userManager;
         _communityModel = communityModel;
     }
@@ -25,8 +24,9 @@ public class CommunityController : Controller
     // GET
      public IActionResult Index()
      {
-        return View(db.COMMUNITY.ToList());
-    }
+        var communities = _communityModel.GetAllCommunities();
+        return View(communities);
+     }
 
 
     public IActionResult Create()
@@ -40,10 +40,10 @@ public class CommunityController : Controller
         collection.UserId = _userManager.GetUserId(this.User);
         collection.CreatedAt = DateTime.Now;
 
-        string communiTyName = collection.Name;
+        string communityName = collection.Name;
 
         // Verificar se o nome da comunidade já existe
-        bool isCommunityNameUnique = !db.COMMUNITY.Any(u => u.Name == communiTyName);
+        bool isCommunityNameUnique = _communityModel.IsCommunityNameUnique(communityName);
 
         if (!isCommunityNameUnique)
         {
@@ -51,15 +51,15 @@ public class CommunityController : Controller
             return View(collection);
         }
 
-        db.COMMUNITY.Add(collection);
-        db.SaveChanges();
+        _communityModel.SaveCommunity(collection, collection.UserId);
+
         return RedirectToAction("Index");
     }
     
     
     public IActionResult CommunityMainPage(int id)
     {
-        var community = db.COMMUNITY.FirstOrDefault(c => c.Id == id);
+        var community = _communityModel.GetCommunityById(id);
 
         if (community == null)
         {
@@ -90,6 +90,7 @@ public class CommunityController : Controller
     [HttpPost]
     public IActionResult FollowCommunityFromButton(int id)
     {
+        
         string userId = _userManager.GetUserId(this.User);
         _communityModel.FollowCommunity(userId, id);
 

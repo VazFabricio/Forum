@@ -16,19 +16,19 @@ namespace ForumUniversitario.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ForumUniversitarioUser> _userManager;
-        private readonly ForumUniversitarioContext db;
         private readonly PublicationModel _publicationModel;
         private readonly CommunityModel _communityModel;
+        private readonly CommentModel _commentModel;
 
-        public PublicationController(ForumUniversitarioContext contexto,
-            UserManager<ForumUniversitarioUser> userManager,
+        public PublicationController(UserManager<ForumUniversitarioUser> userManager,
             PublicationModel publicationModel,
-            CommunityModel communityModel)
+            CommunityModel communityModel,
+            CommentModel commentModel)
         {
-            db = contexto;
             this._userManager = userManager;
             _publicationModel = publicationModel;
             _communityModel = communityModel;
+            _commentModel = commentModel;
 
         }
 
@@ -39,22 +39,20 @@ namespace ForumUniversitario.Controllers
             string userId = _userManager.GetUserId(this.User);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
 
-            var publicacoes =
-                db.PUBLICATION.Include(p => p.User).Include(p => p.Community)
-                    .ToList(); // Inclui o usuário associado à publicação.ToListAsync();
+            var publications = _publicationModel.getPublications();
+
+             // Inclui o usuário associado à publicação.ToListAsync();
             string nomeUsuario = user.AccountName;
-            ViewData["UserName"] = nomeUsuario;
-            return View(publicacoes);
+
+            return View(publications);
         }
 
-        public IActionResult Create(int? communityId)
+        public IActionResult Create(int? communityId)//Pode ou ñão receber um id pq pode ser que o user vai fazer o input
         {
             string userId = _userManager.GetUserId(this.User);
             ViewData["UserID"] = userId;
-            //ViewData["CommunityId"] = communityId;
-            
-            
-            var community = db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
+
+            var community = _communityModel.GetCommunityById(communityId);
 
             if (community == null)
             {
@@ -70,11 +68,8 @@ namespace ForumUniversitario.Controllers
         public IActionResult Create(Publication collection)
         {
 
-            
-            
-
             // Verificar se a comunidade existe pelo nome
-            var community = db.COMMUNITY.FirstOrDefault(c => c.Name == collection.CommunityName);
+            var community = _publicationModel.GetCommunityByName(collection.CommunityName);
 
             if (community == null)
             {
@@ -85,18 +80,13 @@ namespace ForumUniversitario.Controllers
             //Verifica se o User segue a comunidade que ele digitou
             bool isUserFollowing = _communityModel.IsUserFollowing(_userManager.GetUserId(this.User), community.Id);
 
-            collection.UserId = _userManager.GetUserId(this.User);
-            collection.CreatedAt = DateTime.Now;
-            collection.CommunityId = community.Id; // Definir o ID da comunidade na publicação
-
-
             if (!isUserFollowing)
             {
                 ModelState.AddModelError("CommunityName", "Você não segue a comunidade.");
                 return View(collection);
             }
 
-            bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User));
+            bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User), 30);
 
             if (!isAbleToPost)
             {
@@ -104,10 +94,39 @@ namespace ForumUniversitario.Controllers
                 return View(collection);
             }
 
+            _publicationModel.SavePublication(collection, community.Id, _userManager.GetUserId(this.User));
 
-            db.PUBLICATION.Add(collection);
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        
+        
+
+        public IActionResult Details(int id)
+        {
+
+            var userPublication = _publicationModel.GetUserByPublicationId(id);
+            
+            var publication = _publicationModel.GetPublicationById(id);
+
+            if (publication == null)
+            {
+                return NotFound();
+            }
+            
+            
+            var directComments = _commentModel.GetDirectComments(id); // allComments é a lista de todos os comentários
+
+            ViewData["UserNamePublication"] = userPublication.AccountName;
+
+            var allComments = _commentModel.GetAllCommentsForPublication(id);
+
+            
+            ViewBag.DirectComments = directComments;
+            ViewBag.AllComments = allComments;
+
+            return View(publication);
+        }
+        
     }
 }
