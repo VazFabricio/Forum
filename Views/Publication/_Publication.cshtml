@@ -6,9 +6,9 @@
 }
 
 <div class="container mx-auto p-4">
-    <p>
-        <a asp-action="Create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a>
-    </p>
+    @* <p> *@
+    @*     <a asp-action="Create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a> *@
+    @* </p> *@
 
     <button id="openCreateModalBtn" class="btn btn-primary">Criar Publicação</button>
 
@@ -69,7 +69,7 @@
 </div>
 
 <div id="createModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document"> <!-- Alterado o tamanho do modal para modal-xl -->
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Criar Publicação</h5>
@@ -78,12 +78,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Aqui você pode carregar o formulário de criação -->
-                <!-- Usar AJAX para carregar o conteúdo do método Create do controller -->
+               
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
 $(document).ready(function () {
