@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using ForumUniversitario.Entidades;
-using Microsoft.AspNetCore.Identity;
 
 namespace ForumUniversitario.Areas.Identity.Data;
 

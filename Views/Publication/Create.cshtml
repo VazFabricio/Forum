@@ -5,8 +5,8 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
 
-<div class="modal-body modal-lg">
-    <form id="publicationForm"  asp-action="Create">
+<div class="modal-body modal-lg bg-gray-general">
+    <form class="bg-gray-general" id="publicationForm"  asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Title" class="control-label">Título</label>
@@ -20,11 +20,12 @@
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
         <br/> 
-        <div class="form-group">
+        <div class="form-group" id="communityInputContainer">
             <label asp-for="CommunityName" class="control-label">Comunidade</label>
             @if (string.IsNullOrEmpty(ViewData["CommunityName"] as string))
             {
-                <input asp-for="CommunityName" class="form-control" />
+                <input id="communityInput" asp-for="CommunityName" class="form-control"  autocomplete="off" />
+                <ul id="communitySuggestions" class="suggestions-list"></ul>
             }
             else
             {
@@ -32,6 +33,7 @@
             }
             <span asp-validation-for="CommunityName" class="text-danger"></span>
         </div>
+
         <br/>       
         <div class="form-group">
             <input type="submit" id="submitButton" value="Create" class="btn btn-primary bg-primary" />
@@ -56,27 +58,97 @@
         </div>
     </div>
 </div>
+<style>
+
+#communityInputContainer {
+    position: relative;
+}
+
+    /* Estilize o campo de preenchimento */
+    #communityInput {
+        position: relative;
+    }
+
+    /* Estilize a lista de sugestões */
+    .suggestions-list {
+        border: 1px solid rgb(51, 51, 51);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        background-color: rgb(51, 51, 51);;
+        width: calc(100% - 2px); /* Reduz a largura para compensar a borda */
+        z-index: 1;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra */
+            top: 100%; /* Posicione abaixo do campo de preenchimentoContainer */
+            left: 0;
+            width: 100%; /* Largura igual à do campo de preenchimentoContainer */
+    }
+
+    /* Estilize os itens da lista de sugestões */
+    .suggestions-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    /* Posicione a lista de sugestões abaixo do campo de preenchimento */
+    #communitySuggestions {
+        display: none;
+        top: calc(100% + 2px); /* Posicione abaixo do campo de preenchimento */
+        left: 0;
+    }
+</style>
 
 
 <script>
-$("#publicationForm").submit(function (e) {
-    e.preventDefault();
-     console.log("Form submit is being processed.");
-    $.ajax({
-        url: "/Publication/Create",
-        method: "POST",
-        data: $(this).serialize(),
-        success: function (data) {
-            // Sucesso
-            window.location.href = "/"; // Redirecionar após o sucesso
-        },
-        error: function (xhr) {
-            if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.length > 0) {
-                var errorList = xhr.responseJSON.errors.map(error => `<li>${error}</li>`).join('');
-                $("#errorList").html(errorList);
-                $("#errorModal").modal("show");
-            }
+$(document).ready(function () {
+    $("#communityInput").on("input", function () {
+        var inputText = $(this).val();
+        if (inputText.length >= 2) {
+            $.ajax({
+                url: "/Publication/Search",
+                type: "GET",
+                data: { query: inputText },
+                success: function (data) {
+                    var suggestionsList = $("#communitySuggestions");
+                    suggestionsList.empty();
+                    data.forEach(function (community) {
+                       
+                        suggestionsList.append(`<li>${community}</li>`);
+                    });
+                    suggestionsList.show();
+                }
+            });
+        } else {
+            $("#communitySuggestions").hide();
         }
+    });
+
+    $("#communitySuggestions").on("click", "li", function () {
+        var selectedCommunity = $(this).text();
+        $("#communityInput").val(selectedCommunity);
+        $("#communitySuggestions").hide();
+    });
+
+    $("#publicationForm").submit(function (e) {
+        e.preventDefault();
+        console.log("Form submit is being processed.");
+        $.ajax({
+            url: "/Publication/Create",
+            method: "POST",
+            data: $(this).serialize(),
+            success: function (data) {
+                // Sucesso
+                window.location.href = "/";
+            },
+            error: function (xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.length > 0) {
+                    var errorList = xhr.responseJSON.errors.map(error => `<li>${error}</li>`).join('');
+                    $("#errorList").html(errorList);
+                    $("#errorModal").modal("show");
+                }
+            }
+        });
     });
 });
 </script>

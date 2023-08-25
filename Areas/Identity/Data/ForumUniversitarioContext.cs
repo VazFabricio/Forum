@@ -1,6 +1,5 @@
 ﻿using ForumUniversitario.Areas.Identity.Data;
 using ForumUniversitario.Entidades;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +19,8 @@ public class ForumUniversitarioContext : IdentityDbContext<ForumUniversitarioUse
     public DbSet<Membership> MEMBERSHIP { get; set; }
 
     public DbSet<Comment> COMMENT { get; set; }
+
+    public DbSet<Like> LIKES { get; set; }
 
     public async Task<bool> IsUserNameUnique(string userName)
     {

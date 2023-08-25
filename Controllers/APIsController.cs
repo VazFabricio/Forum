@@ -1,5 +1,4 @@
 ﻿using ForumUniversitario.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumUniversitario.Controllers

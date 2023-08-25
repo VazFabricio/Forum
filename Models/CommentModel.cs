@@ -23,7 +23,7 @@ namespace ForumUniversitario.Models
             return db.COMMENT.ToList();
         }
 
-        public void SaveComment(Comment comment, string UserId) 
+        public void SaveComment(Comment comment, string UserId)
         {
             comment.UserId = UserId;
             comment.CreatedAt = DateTime.Now;
@@ -54,7 +54,7 @@ namespace ForumUniversitario.Models
                 {
                     //Pega o valor desse superior 
                     var parentComment = comments.FirstOrDefault(c => c.Id == comment.ParentId);
-                    
+
                     //Garantindo a presença de um valor para casos de erros, mas não é obrigatório
                     if (parentComment != null)
                     {
@@ -63,16 +63,16 @@ namespace ForumUniversitario.Models
                         {
                             parentComment.ChildComments = new List<Comment>();
                         }
-                        
+
                         //pega o comentário que foi definido como filho e adiciona na lista de filhos do pai
                         parentComment.ChildComments.Add(comment);
                     }
                 }
-                
+
                 //se o comentário nao tiver um pai, siguinifica que ele é direto na publicação, por isso ele retorna com 
                 //sua propriedade de List<ChildComents> vazia.
             }
-            
+
             //Retorna na lista final somente os que principais, pois eles já tem os filhos armazenados na sua propriedade.
             return comments.Where(c => !c.ParentId.HasValue).ToList();
         }

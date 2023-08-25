@@ -1,9 +1,9 @@
-﻿using ForumUniversitario.Models;
+﻿using ForumUniversitario.Areas.Identity.Data;
+using ForumUniversitario.Data;
+using ForumUniversitario.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using ForumUniversitario.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
-using ForumUniversitario.Data;
 
 namespace ForumUniversitario.Controllers
 {
@@ -24,8 +24,9 @@ namespace ForumUniversitario.Controllers
         {
             string userId = _userManager.GetUserId(this.User);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-
             
+            ViewData["HideNavBar"] = true;
+
             ViewData["UserName"] = user?.AccountName;
             return View();
         }

@@ -1,8 +1,6 @@
 using ForumUniversitario.Areas.Identity.Data;
-using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using ForumUniversitario.Models;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,13 +18,13 @@ public class CommunityController : Controller
         this._userManager = userManager;
         _communityModel = communityModel;
     }
-    
+
     // GET
-     public IActionResult Index()
-     {
+    public IActionResult Index()
+    {
         var communities = _communityModel.GetAllCommunities();
         return View(communities);
-     }
+    }
 
 
     public IActionResult Create()
@@ -55,8 +53,8 @@ public class CommunityController : Controller
 
         return RedirectToAction("Index");
     }
-    
-    
+
+
     public IActionResult CommunityMainPage(int id)
     {
         var community = _communityModel.GetCommunityById(id);
@@ -73,7 +71,7 @@ public class CommunityController : Controller
         ViewData["CommunityDesc"] = community.Description;
         ViewData["CommunityCreatedAt"] = community.CreatedAt.ToString("dd/MM/yyyy");
         ViewData["CommunityId"] = community.Id;
-        
+
 
         // Get the current user's ID
         string userId = _userManager.GetUserId(this.User);
@@ -81,8 +79,8 @@ public class CommunityController : Controller
         ViewData["UserId"] = userId;
 
         ViewData["IsFollowing"] = _communityModel.IsUserFollowing(userId, id);
-        
-        
+
+
         // Pass the CommunityModel to the view
         return View(_communityModel);
     }
@@ -90,7 +88,7 @@ public class CommunityController : Controller
     [HttpPost]
     public IActionResult FollowCommunityFromButton(int id)
     {
-        
+
         string userId = _userManager.GetUserId(this.User);
         _communityModel.FollowCommunity(userId, id);
 

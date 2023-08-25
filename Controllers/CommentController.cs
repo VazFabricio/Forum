@@ -2,7 +2,6 @@
 using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using ForumUniversitario.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +35,7 @@ namespace ForumUniversitario.Controllers
 
             return View(comments);
         }
-        
+
 
         // GET: CommentController/Create
         public IActionResult Create(int? publicationId, int? fatherCommentId)
@@ -57,7 +56,7 @@ namespace ForumUniversitario.Controllers
             ViewData["PublicationId"] = publication.Id;
             ViewData["FatherCommentId"] = fatherComment != null ? fatherComment.Id : null;
 
-            
+
             ViewBag.Publication = publication;
 
             // Outras lógicas de preparação de dados

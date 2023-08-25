@@ -1,11 +1,9 @@
-using ForumUniversitario.Entidades;
 using ForumUniversitario.Areas.Identity.Data;
 using ForumUniversitario.Controllers;
 using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ForumUniversitario.Models;
 
@@ -25,17 +23,17 @@ public class CommunityModel : Community
     public List<Publication> GetPublicationsForCommunity(int communityId)
     {
         Publications = db.PUBLICATION
-    .Include(p => p.User) // Include the User navigation property
-    .Where(p => p.CommunityId == communityId)
-    .ToList();
+            .Include(p => p.User) // Include the User navigation property
+            .Where(p => p.CommunityId == communityId)
+            .ToList();
         return Publications;
     }
 
-    public List<Community> GetAllCommunities () 
+    public List<Community> GetAllCommunities()
     {
         return db.COMMUNITY.ToList();
     }
-    public void SaveCommunity(Community community, string UserId) 
+    public void SaveCommunity(Community community, string UserId)
     {
         community.UserId = UserId;
         community.CreatedAt = DateTime.Now;
@@ -45,7 +43,7 @@ public class CommunityModel : Community
         db.SaveChanges();
 
     }
-    public bool IsCommunityNameUnique(string communiTyName) 
+    public bool IsCommunityNameUnique(string communiTyName)
     {
         bool isCommunityNameUnique = !db.COMMUNITY.Any(u => u.Name == communiTyName);
         return isCommunityNameUnique;
@@ -78,7 +76,7 @@ public class CommunityModel : Community
         }
     }
 
-    
+
     public void UnfollowCommunity(string userId, int communityId)
     {
         // Verificar se o usuário já está seguindo a comunidade
@@ -108,7 +106,17 @@ public class CommunityModel : Community
 
     public Community GetCommunityById(int? communityId)
     {
-            return db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
+        return db.COMMUNITY.FirstOrDefault(c => c.Id == communityId);
+    }
+
+    public List<string> GetCommunitiesNameLike(string query)
+    {
+        var matchingCommunities = db.COMMUNITY
+            .Where(community => community.Name.Contains(query))
+            .Select(community => community.Name)
+            .ToList();
+
+        return matchingCommunities;
     }
 
 }

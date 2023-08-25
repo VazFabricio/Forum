@@ -1,7 +1,6 @@
 ﻿using ForumUniversitario.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Xunit.Sdk;
 
 namespace ForumUniversitario.Entidades
 {
@@ -27,7 +26,7 @@ namespace ForumUniversitario.Entidades
         [Required] public int PublicationId { get; set; } // ID da publicação associada
         public Publication Publication { get; set; } // Referência para a publicação associada
 
-        [NotMapped] 
+        [NotMapped]
         public List<Comment> ChildComments { get; set; }
     }
 }

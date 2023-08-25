@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using ForumUniversitario.Areas.Identity.Data;
+﻿using ForumUniversitario.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ForumUniversitario.Entidades;
 
@@ -17,7 +17,7 @@ public class Community
 
 
     [Column(TypeName = "nvarchar(60)")]
-     public string Name { get; set; }
+    public string Name { get; set; }
 
     [PersonalData]
     public DateTime CreatedAt { get; set; }
@@ -27,9 +27,9 @@ public class Community
     [PersonalData]
     [Column(TypeName = "nvarchar(255)")]
     public string UserId { get; set; }
-    
-     // Referência ao usuário que criou a comunidade
-     public ForumUniversitarioUser User { get; set; }
+
+    // Referência ao usuário que criou a comunidade
+    public ForumUniversitarioUser User { get; set; }
 
 
     public ICollection<Membership> Memberships { get; set; }

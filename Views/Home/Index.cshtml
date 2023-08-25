@@ -2,21 +2,57 @@
     ViewData["Title"] = "Home Page";
 }
 
+
+<div class=" text-white flex justify-between items-center">
+    <div class="left-section">
+        <img src="LOGOFORUM.jpg" alt="Ícone" class="icon-img max-w-full h-auto">
+    </div>
+    <div class="center-section flex gap-4">
+
+    </div>
+    <div class="right-section">
+                <a class="login-button px-4 py-2 bg-blue-500 text-white rounded" href="#" id="login-button">Entrar</a>
+                <a class="register-button px-4 py-2 bg-blue-500 text-white rounded" href="#" id="register-button">Registrar</a>
+    </div>
+</div>
+
+<div class="mt-5 font-bold font-size-45px">Nós construímos as conexões, 
+   <br/>para que você rume ao
+   <br/>crescimento compartilhado
+</div>
+
+<div class=" mt-2 font-semibold font-size-20px">Compartilhar, Conectar e Crescer</div>
+
+<div class="container-home mt-5">
+    <div class="left-column-home">
+        <img class="rounded-10px" src="background2.jpg" alt="Imagem da esquerda">
+        <div class="image-text p-4">
+            <p class="font-size-30px">Publicações, Comunidades</p>
+            
+            <p class="font-size-45px font-extrabold "> Conexões</p>
+        </div>
+    </div>
+    <div class="right-column-home">
+        <div class="square square-top" style="margin-bottom: auto;"></div>
+        <div class="square square-bottom" style="margin-top: auto;"></div>
+    </div>
+</div>
+
+
 <div class="grid grid-cols-12 gap-4"/>
-<div class="col-span-2">
-    <div class="bg-gray-200 p-4 rounded mt-4">
-        <h3 class="text-lg font-bold">Comunidades Populares</h3>
+<div class="col-span-2 ">
+    <div class="bg-gray-general p-4 rounded mt-4 ">
+        <h3 class="text-lg font-bold ">Comunidades Populares</h3>
         <ul class="mt-2">
-                
         </ul>
     </div>
 </div>
 <div class="col-span-8">
     <div class="timeline">
-        <div class="bg-white p-4 rounded shadow mb-4 mt-4">
+        <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4">
             <div class="flex items-center justify-between mb-2">
                 <p>
-                    <strong>Fórum Universitário</strong>
+                    <strong>Fórum Universitário @ViewData["HideNavBar"]</strong>
                 </p>
                 <p class="text-gray-500">A qualquer momento</p>
             </div>
@@ -32,3 +68,11 @@
         <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p>
     </div>
 </div>
+
+<style>
+   
+    #iconeDiv img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>

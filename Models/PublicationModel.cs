@@ -3,9 +3,7 @@ using ForumUniversitario.Controllers;
 using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.Intrinsics.X86;
 
 namespace ForumUniversitario.Models
 {
@@ -14,7 +12,6 @@ namespace ForumUniversitario.Models
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ForumUniversitarioUser> _userManager;
         private readonly ForumUniversitarioContext db;
-
 
         public PublicationModel(ForumUniversitarioContext contexto)
         {
@@ -30,9 +27,9 @@ namespace ForumUniversitario.Models
             return publications;
         }
 
-        public bool isAbleToPost(string userId, int SecondsBetweenPosts) 
+        public bool isAbleToPost(string userId, int SecondsBetweenPosts)
         {
-            
+
             var lastPost = db.PUBLICATION.Where(p => p.UserId == userId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
 
             if (lastPost != null)
@@ -40,7 +37,7 @@ namespace ForumUniversitario.Models
                 // Verificar se já se passaram 30 segundos
                 TimeSpan elapsedTime = DateTime.Now - lastPost.CreatedAt;
                 if (elapsedTime.TotalSeconds < SecondsBetweenPosts)
-                {     
+                {
                     return false;
                 }
 
@@ -73,17 +70,23 @@ namespace ForumUniversitario.Models
 
 
         public ForumUniversitarioUser GetUserByPublicationId(int publicationId)
-                 {
-                     var publication = db.PUBLICATION
-                         .Include(p => p.User) // Carrega informações do usuário
-                         .FirstOrDefault(p => p.Id == publicationId);
-         
-                     if (publication != null)
-                     {
-                         return publication.User;
-                     }
-                     return null;
-                 }
+        {
+            var publication = db.PUBLICATION
+                .Include(p => p.User) // Carrega informações do usuário
+                .FirstOrDefault(p => p.Id == publicationId);
+
+            if (publication != null)
+            {
+                return publication.User;
+            }
+            return null;
+        }
+
+        public void UpdatePublication(Publication publication)
+        {
+            db.PUBLICATION.Update(publication);
+            db.SaveChanges();
+        }
 
     }
 

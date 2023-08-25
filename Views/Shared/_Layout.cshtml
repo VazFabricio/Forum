@@ -8,36 +8,48 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ForumUni.styles.css" asp-append-version="true" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <link rel="icon" href="~/LOGOFORUM.jpg" type="image/x-icon" />
+    <link rel="shortcut icon" href="~/LOGOFORUM.jpg" type="image/x-icon" />
 </head>
-<body class="flex flex-col min-h-screen">
-    <header class="bg-white border-bottom box-shadow">
-        <nav>
-            <div class="container flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Forum Universitario</a>
-                    
-                </div>
-                <partial name="_LoginPartial.cshtml" />
+<body class="flex flex-col min-h-screen roboto-font">
+@if(ViewBag.HideNavBar == null) {
+<header class="bg-gray-700 border-bottom box-shadow roboto-font">
+    <nav>
+        <div class="container flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Forum Universitario</a>
+                <div>Pesquisar</div>
             </div>
-        </nav>
-    </header>
 
-    <div class="container flex-grow">
-        <main role="main" class="flex-grow">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted mt-auto">
-        <div class="container">
-            &copy; 2023 - ForumUni - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav>
+</header>
+}
+<div class="container flex-grow">
+    @* DEFINIR COISAS GERAIS DO CORPO AQUI *@
+    <main role="main" class="flex-grow roboto-font">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted mt-auto roboto-font">
+    <div class="container">
+        &copy; 2023 - ForumUni - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+   body, html, header{
+   background-color: rgb(26, 26, 26);
+   font-family: "Arial", sans-serif; /* Substitua "Arial" pela fonte que desejar */
+   color: white; /* Cor da fonte */ 
+   }
+</style>

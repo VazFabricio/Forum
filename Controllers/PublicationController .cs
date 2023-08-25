@@ -3,11 +3,8 @@ using ForumUniversitario.Data;
 using ForumUniversitario.Entidades;
 using ForumUniversitario.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Crypto.Digests;
 
 namespace ForumUniversitario.Controllers
 {
@@ -17,18 +14,24 @@ namespace ForumUniversitario.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ForumUniversitarioUser> _userManager;
         private readonly PublicationModel _publicationModel;
+        private readonly LikeModel _likeModel;
         private readonly CommunityModel _communityModel;
         private readonly CommentModel _commentModel;
+        private readonly ForumUniversitarioContext db;
 
         public PublicationController(UserManager<ForumUniversitarioUser> userManager,
             PublicationModel publicationModel,
             CommunityModel communityModel,
-            CommentModel commentModel)
+            CommentModel commentModel,
+            LikeModel likeModel,
+            ForumUniversitarioContext contexto)
         {
             this._userManager = userManager;
             _publicationModel = publicationModel;
             _communityModel = communityModel;
             _commentModel = commentModel;
+            _likeModel = likeModel;
+            db = contexto;
 
         }
 
@@ -39,9 +42,12 @@ namespace ForumUniversitario.Controllers
             string userId = _userManager.GetUserId(this.User);
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
 
+            ViewData["UserName"] = user.AccountName;
+            
+
             var publications = _publicationModel.getPublications();
 
-             // Inclui o usuário associado à publicação.ToListAsync();
+            // Inclui o usuário associado à publicação.ToListAsync();
             string nomeUsuario = user.AccountName;
 
             return View(publications);
@@ -60,7 +66,7 @@ namespace ForumUniversitario.Controllers
             }
 
             ViewData["CommunityName"] = community.Name;
-            
+
             return View();
         }
 
@@ -76,7 +82,7 @@ namespace ForumUniversitario.Controllers
                 errors.Add("A comunidade informada não existe.");
             }
 
-            if (community!=null)
+            if (community != null)
             {
                 bool isUserFollowing = _communityModel.IsUserFollowing(_userManager.GetUserId(this.User), community.Id);
                 if (!isUserFollowing)
@@ -84,7 +90,7 @@ namespace ForumUniversitario.Controllers
                     errors.Add("Você não segue a comunidade.");
                 }
             }
-            
+
             bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User), 30);
 
             if (!isAbleToPost)
@@ -102,34 +108,68 @@ namespace ForumUniversitario.Controllers
             return RedirectToAction("Index");
         }
 
-        
-        
+
+
 
         public IActionResult Details(int id)
         {
 
             var userPublication = _publicationModel.GetUserByPublicationId(id);
-            
+
             var publication = _publicationModel.GetPublicationById(id);
 
             if (publication == null)
             {
                 return NotFound();
             }
-            
-            
+
+
             var directComments = _commentModel.GetDirectComments(id); // allComments é a lista de todos os comentários
 
             ViewData["UserNamePublication"] = userPublication.AccountName;
 
             var allComments = _commentModel.GetAllCommentsForPublication(id);
 
-            
+
             ViewBag.DirectComments = directComments;
             ViewBag.AllComments = allComments;
 
             return View(publication);
+
+        }
+
+        public IActionResult Search(string query)
+        {
+            // Realize uma consulta no banco de dados ou na sua fonte de dados para obter as comunidades correspondentes
+            var matchingCommunities = _communityModel.GetCommunitiesNameLike(query);
+
+            return Json(matchingCommunities);
+        }
+
+        [HttpPost]
+        public IActionResult LikePublication(int id)
+        {
+            var userId = _userManager.GetUserId(this.User);
+
+            var publication = _publicationModel.GetPublicationById(id);
+
+            
+            var existingLike = _likeModel.GetLikeByUserAndPublication(userId,publication.Id);
+
+            if (existingLike != null)
+            {
+               
+                _likeModel.RemoveLike(existingLike);
+            }
+            else
+            {
+               
+                _likeModel.AddLike(userId, publication.Id);
+            }
+
+            return Ok(); 
         }
         
+
     }
 }

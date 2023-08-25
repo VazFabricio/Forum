@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using ForumUniversitario.Data;
 using ForumUniversitario.Areas.Identity.Data;
+using ForumUniversitario.Data;
 using ForumUniversitario.Models;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ForumUniversitarioContextConnection") ?? throw new InvalidOperationException("Connection string 'ForumUniversitarioContextConnection' not found.");
@@ -17,6 +15,7 @@ builder.Services.AddDefaultIdentity<ForumUniversitarioUser>(options => options.S
 builder.Services.AddScoped<PublicationModel>();
 builder.Services.AddScoped<CommunityModel>();
 builder.Services.AddScoped<CommentModel>();
+builder.Services.AddScoped<LikeModel>();
 
 
 // Add services to the container.
@@ -39,7 +38,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -62,8 +61,13 @@ app.UseEndpoints(endpoints =>
 
     endpoints.MapControllerRoute(
         name: "api",
-        pattern: "api/{controller}/{action}/{id?}"); // Adicione esse endpoint para a API
-    
+        pattern: "api/{controller}/{action}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "teste",
+        pattern: "Publication/LikePublication/{id}",
+        defaults: new { controller = "Publication", action = "LikePublication" });
+
     endpoints.MapDefaultControllerRoute();
 });
 
