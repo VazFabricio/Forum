@@ -59,11 +59,11 @@
                         <br/>
                         <div class="flex items-center gap-4">
                             <a href="#" data-publication-id="@publicacao.Id" class="like-button">
-                                <i class="gg-heart"></i>
+                                <img src="\Icons\heart.svg" alt="like"> 
                             </a>
-                            @* ABRIR A MODAL DE COMENTAR *@
+                        @* ABRIR A MODAL DE COMENTAR *@
                             <a asp-action="Details" asp-route-id="@publicacao.Id">
-                                <i class="gg-comment"></i>
+                                <img src="\Icons\message_square.svg" alt="comentar">
                             </a>
                         </div>
                     </div>
@@ -107,22 +107,25 @@ $(document).ready(function () {
         });
     });
 
+
+    // Like button click handler
     $(".like-button").click(function (event) {
-        event.preventDefault();
-
-        var publicationId = $(this).data("publication-id");
-        var url = "/Publication/LikePublication/" + publicationId;
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function () {
-                
-            },
-            error: function (xhr, status, error) {
-                console.log("Erro ao curtir a publicação:", error);
-            }
-        });
+            event.preventDefault();
+    
+            var publicationId = $(this).data("publication-id");
+            var url = "/Publication/LikePublication/" + publicationId;
+    
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function () {
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.log("Erro ao curtir a publicação:", error);
+                }
+            });
     });
+
 });
 </script>
