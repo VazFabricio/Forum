@@ -5,19 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Detalhes da Comunidade @ViewData["CommunityName"]</h2>
-
-<p><strong>Descrição:</strong> @ViewData["CommunityDesc"]</p>
-<p><strong>Data de Criação:</strong> @ViewData["CommunityCreatedAt"]</p>
-
 @{
     // Generate the link to the Create action in the PublicationController and include the community ID as a route value
     var createPublicationLink = Url.Action("Create", "Publication", new { communityId = @ViewData["CommunityId"] });
 }
 
-<p>
-    <a href="@createPublicationLink" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a>
-</p>
+<div class=" w-full height-10em flex bg-gray-general-lighter justify-center no-margin">
+    
+
+</div >
+
+<div class=" w-full height-5em flex bg-gray-general justify-center no-margin">
+    
+<h2>@ViewData["CommunityName"]</h2>
+
+<p><strong>Descrição:</strong> @ViewData["CommunityDesc"]</p>
+<p><strong>Data de Criação:</strong> @ViewData["CommunityCreatedAt"]</p>
+
+    
+</div>
+
+<div class="container mt-5">
+    
+
+
+
+    <p>
+        <a href="@createPublicationLink" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a>
+    </p>
 
 <div id="followButtonContainer">
     @if (User.Identity.IsAuthenticated)
@@ -69,7 +84,7 @@
                     </h3>
                     <p class="mt-2">@publicacao.Content</p>
                 </div>
-}   
+            }   
         </div>
     </div>
 
@@ -81,3 +96,13 @@
         </div>
     </div>
 </div>
+
+    
+</div>
+
+<style>
+.no-margin{
+margin: 0;
+}
+    
+</style>
