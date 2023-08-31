@@ -82,14 +82,17 @@ namespace ForumUniversitario.Areas.Identity.Pages.Account
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                Response.Redirect("/");
+                //Response.Redirect("/");
+                HttpContext.Response.Redirect("/Publication/Index");
+                return;
+               
             }
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Action("Index", "Publication");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -101,7 +104,7 @@ namespace ForumUniversitario.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Publication");
+            returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -113,7 +116,7 @@ namespace ForumUniversitario.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Publication");
                 }
                 if (result.RequiresTwoFactor)
                 {

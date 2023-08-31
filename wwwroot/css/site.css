@@ -44,45 +44,6 @@
     margin-top: 5px;
 }
 
-.gg-comment {
-    box-sizing: border-box;
-    position: relative;
-    display: block;
-    transform: scale(var(--ggs,1));
-    width: 16px;
-    height: 12px;
-    border: 2px solid;
-    border-bottom: 0;
-    box-shadow:
-            -6px 8px 0 -6px,
-            6px 8px 0 -6px
-}
-
-.gg-comment::after,
-.gg-comment::before {
-    content: "";
-    display: block;
-    box-sizing: border-box;
-    position: absolute;
-    width: 8px
-}
-
-.gg-comment::before {
-    border: 2px solid;
-    border-top-color: transparent;
-    border-bottom-left-radius: 20px;
-    right: 4px;
-    bottom: -6px;
-    height: 6px
-}
-
-.gg-comment::after {
-    height: 2px;
-    background: currentColor;
-    box-shadow: 0 4px 0 0;
-    left: 4px;
-    top: 4px
-}
 .text-red {
     color: red;
 }
@@ -161,7 +122,9 @@ textarea.autosize {
 }
 
 .roboto-font{
-    font-family: Roboto, Arial, sans-serif;
+    /*font-family: Roboto, Arial, sans-serif;*/
+    font-family: 'Quicksand', sans-serif;
+    font-size: small;
 }
 .register-button,
 .login-button {
@@ -249,8 +212,6 @@ textarea.autosize {
 }
 
 
-
-
 .container-home {
     display: flex;
     justify-content: space-between;
@@ -318,4 +279,190 @@ textarea.autosize {
     height: 110px;
     background-color: #ffffff; /* Cor da linha */
     content: "";
+}
+
+.ml-45{
+    margin-left: 45%;
+}
+
+.ml-40{
+    margin-left: 40%;
+}
+
+.ml-5{
+    margin-left: 5%;
+}
+
+.menu-box{
+    background: linear-gradient(to bottom right, #009D98FF, #009D56FF);
+}
+
+.gradient-verde{
+    background: linear-gradient(to bottom right, #009D98FF, #009D56FF);
+}
+
+.fonte-teste{
+    font-family: "Book Antiqua", serif;
+}
+
+.bottom-rounded {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden; /* Garante que o conteúdo não ultrapasse as bordas arredondadas */
+}
+
+
+
+
+/* Gradiente de borda para a div "Comunidades" */
+.blue-aura {
+    box-shadow: 0 0 45px rgba(52, 144, 220); /* Defina as propriedades do efeito */
+    border-radius: 50px; /* Ajuste o raio da borda */
+}
+
+.green-aura {
+    box-shadow: 0 0 45px rgb(52, 220, 105); /* Defina as propriedades do efeito */
+    border-radius: 50px; /* Ajuste o raio da borda */
+}
+
+.gray-border{
+    border-bottom: 2px solid #505050;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box input[type="text"] {
+    padding: 2px; /* Ajuste o valor conforme necessário */
+    width: 400px; /* Ajuste o valor conforme necessário */
+    border: white;
+    border-radius: 4px;
+    background-color: rgb(80, 80, 80);
+}
+
+.search-box input[type="text"]:focus {
+    outline: none;
+}
+
+.search-box button {    
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px; /* Ajuste o valor conforme necessário */
+    cursor: pointer;
+}
+
+@media (max-width: 1280px) {
+    .col-md-2 {
+        width: 100%; /* Tornar a coluna ocupar 100% da largura */
+        margin-right: 0; /* Remover margem direita */
+    }
+    .col-md-2.d-none.d-md-block {
+        display: block; /* Exibir a coluna que estava oculta */
+        width: 100%; /* Tornar a coluna ocupar 100% da largura */
+        margin-right: 0; /* Remover margem direita */
+    }
+    .col-md-8 {
+        width: 100%; /* Tornar a segunda coluna ocupar 100% da largura */
+    }
+    .modal-dialog {
+        max-width: 90%; /* Reduza a largura da modal para telas menores */
+    }
+
+    .modal-body {
+        padding: 20px; /* Ajuste o espaçamento interno para telas menores */
+    }
+
+}
+
+#communityInputContainer {
+    position: relative;
+}
+
+.gradient-verde {
+    background: linear-gradient(to bottom right, #009D98FF, #009D56FF);
+    color: white; /* Define a cor do texto como branco para melhor legibilidade */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out; /* Adiciona uma transição suave */
+}
+
+.gradient-verde:hover {
+    background: linear-gradient(to bottom right, #009D56FF, #009D98FF);
+}
+/* Estilize o campo de preenchimento */
+#communityInput {
+    position: relative;
+}
+
+/* Estilize a lista de sugestões */
+.suggestions-list {
+    border: 1px solid rgb(51, 51, 51);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: rgb(77,77,77);;
+    width: calc(100% - 2px); /* Reduz a largura para compensar a borda */
+    z-index: 1;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra */
+    top: 100%; /* Posicione abaixo do campo de preenchimentoContainer */
+    left: 0;
+    width: 100%; /* Largura igual à do campo de preenchimentoContainer */
+}
+
+/* Estilize os itens da lista de sugestões */
+.suggestions-list li {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Posicione a lista de sugestões abaixo do campo de preenchimento */
+#communitySuggestions {
+    display: none;
+    top: calc(100% + 2px); /* Posicione abaixo do campo de preenchimento */
+    left: 0;
+}
+
+.form-control {
+    background-color:  rgb(80, 80, 80); /* Define a cor de fundo desejada */
+    color: white; /* Define a cor do texto para branco */
+    /* Outros estilos de form-control */
+}
+
+.form-control:focus {
+    background-color:  rgb(80, 80, 80); /* Mantém a mesma cor de fundo para o estado de foco */
+    color: white; /* Mantém a cor do texto para branco no estado de foco */
+    /* Outros estilos para o estado de foco */
+}
+
+.height-10em{
+    height: 10em;
+}
+
+.height-5em {
+    height: 5em;
+}
+.w-100{
+width: 25%;    
+}
+
+.no-margin{
+    margin: 0;
+}
+
+/* Estilo padrão do link */
+.remove-link-styles a {
+    color: inherit; /* Mantém a cor de texto herdada do elemento pai */
+    text-decoration: none; /* Remove o sublinhado */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+/* Estilo do link ao passar o mouse */
+.remove-link-styles a:hover {
+    text-decoration: none; /* Mantém o sublinhado removido ao passar o mouse */
+    color: inherit; /* Mantém a cor de texto herdada ao passar o mouse */
 }

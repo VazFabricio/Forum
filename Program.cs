@@ -67,6 +67,11 @@ app.UseEndpoints(endpoints =>
         name: "teste",
         pattern: "Publication/LikePublication/{id}",
         defaults: new { controller = "Publication", action = "LikePublication" });
+    
+    // endpoints.MapControllerRoute(
+    //     name: "isLiked",
+    //     pattern: "Publication/{id}/isLike",
+    //     defaults: new { controller = "Publication", action = "IsPublicationLiked" });
 
     endpoints.MapDefaultControllerRoute();
 });

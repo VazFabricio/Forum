@@ -19,15 +19,17 @@ namespace ForumUniversitario.Controllers
             this._userManager = userManager;
 
         }
-
+        
         public IActionResult Index()
         {
-            string userId = _userManager.GetUserId(this.User);
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Publication");
+            }
             
             ViewData["HideNavBar"] = true;
 
-            ViewData["UserName"] = user?.AccountName;
             return View();
         }
 

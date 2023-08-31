@@ -1,18 +1,18 @@
-﻿﻿@{
+﻿@{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row justify-content-center">
-    <div class="col-5 mt-5">
-        <div class="card login-logout-card">
-            <div class="card-header">
+<div class="row justify-content-center ">
+    <div class="col-5 mt-5 ">
+        <div class="card login-logout-card bg-gray-general ">
+            <div class="card-header bg-gray-general-lighter">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <a class="nav-link" href="/Identity/Account/Login">
                             Log In
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ">
                         <a class="nav-link" href="/Identity/Account/Register">
                             Register
                         </a>
@@ -29,6 +29,29 @@
         </div>
     </div>
 </div>
+
+<style>
+    .nav-link {
+            color: #000000 !important; /* Cor do texto para preto */
+            background-color: transparent !important; /* Fundo transparente */
+        }
+        
+        .nav-link:hover,
+        .nav-link:active {
+            color: #000000 !important; /* Cor do texto mantida como preto ao passar o mouse ou quando ativo */
+            /* Cor de fundo quando o botão estiver ativo */
+        }
+    
+        .nav-link {
+            color: white !important; /* Defina a cor do texto para preto */
+        }
+        
+        .nav-link:hover,
+        .nav-link:active {
+            color: white !important; /* Mantém a cor do texto como preto ao passar o mouse ou quando ativo */
+        }
+    
+</style>
 
 @section Scripts{
     @await RenderSectionAsync("Scripts", required: false)

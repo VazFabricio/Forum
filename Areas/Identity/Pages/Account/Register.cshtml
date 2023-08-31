@@ -8,31 +8,54 @@
 
 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
     <h2>Create a new account.</h2>
-    <hr />
+    <hr class="mt-1" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-floating mb-3">
-            <input asp-for="Input.AccountName" class="form-control" autocomplete="username" aria-required="true" />
-            <label asp-for="Input.AccountName">conta</label>
+    <div class="form-floating mb-3 mt-4">
+            <input asp-for="Input.AccountName" class="form-control bg-gray-general-lighter" autocomplete="username" aria-required="true" />
+            <label asp-for="Input.AccountName">Usuário</label>
             <span asp-validation-for="Input.AccountName" class="text-danger"></span>
     </div>
     <div class="form-floating mb-3">
-        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+        <input asp-for="Input.Email" class="form-control bg-gray-general-lighter" autocomplete="username" aria-required="true" />
         <label asp-for="Input.Email"></label>
         <span asp-validation-for="Input.Email" class="text-danger"></span>
     </div>
     <div class="form-floating mb-3">
-        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" class="form-control bg-gray-general-lighter"  autocomplete="new-password" aria-required="true" />
+        <label asp-for="Input.Password">Senha</label>
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
     <div class="form-floating mb-3">
-        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-        <label asp-for="Input.ConfirmPassword"></label>
+        <input asp-for="Input.ConfirmPassword" class="form-control bg-gray-general-lighter" autocomplete="new-password" aria-required="true" />
+        <label asp-for="Input.ConfirmPassword">Confirmar senha</label>
         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
     </div>
-    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary gradient-verde">Register</button>
 </form>
 
+<style>
+    .form-control {
+        background-color:  rgb(80, 80, 80); /* Define a cor de fundo desejada */
+        color: white; /* Define a cor do texto para branco */
+        /* Outros estilos de form-control */
+    }
+    
+    .form-control:focus {
+        background-color:  rgb(80, 80, 80); /* Mantém a mesma cor de fundo para o estado de foco */
+        color: white; /* Mantém a cor do texto para branco no estado de foco */
+        /* Outros estilos para o estado de foco */
+    }
+    .gradient-verde {
+        background: linear-gradient(to bottom right, #009D98FF, #009D56FF);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+    }
+
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

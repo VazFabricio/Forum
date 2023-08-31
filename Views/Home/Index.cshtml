@@ -11,8 +11,9 @@
 
     </div>
     <div class="right-section">
-                <a class="login-button px-4 py-2 bg-blue-500 text-white rounded" href="#" id="login-button">Entrar</a>
-                <a class="register-button px-4 py-2 bg-blue-500 text-white rounded" href="#" id="register-button">Registrar</a>
+         <a class="login-button px-4 py-2 bg-blue-500 text-white rounded" id="login" asp-area="Identity" asp-page="/Account/Login">Entrar</a>
+        <a class="login-button px-4 py-2 bg-blue-500 text-white rounded" id="register" asp-area="Identity" asp-page="/Account/Register">Registrar</a>
+        
     </div>
 </div>
 
@@ -33,46 +34,54 @@
         </div>
     </div>
     <div class="right-column-home">
-        <div class="square square-top" style="margin-bottom: auto;"></div>
-        <div class="square square-bottom" style="margin-top: auto;"></div>
-    </div>
-</div>
-
-
-<div class="grid grid-cols-12 gap-4"/>
-<div class="col-span-2 ">
-    <div class="bg-gray-general p-4 rounded mt-4 ">
-        <h3 class="text-lg font-bold ">Comunidades Populares</h3>
-        <ul class="mt-2">
-        </ul>
-    </div>
-</div>
-<div class="col-span-8">
-    <div class="timeline">
-        <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4">
-            <div class="flex items-center justify-between mb-2">
-                <p>
-                    <strong>Fórum Universitário @ViewData["HideNavBar"]</strong>
-                </p>
-                <p class="text-gray-500">A qualquer momento</p>
+        <div class="square square-top flex" style="margin-bottom: auto;;">
+            <div class="p-4">
+                <p class="font-bold font-size-20px">Comentários de Comentários</p>
+                <p class="">Aventure-se em uma conversa ilimitada</p>
+                <br>
+                <div class="ml-45"><img src="~/Icons/comments_home.svg" alt=""></div>
+                
+                
             </div>
-            <h3 class="text-lg font-bold">O melhor lugar para compartilhar, se divertir </h3>
-            <p class="mt-2">E se conectar!</p>
         </div>
-    </div>
-</div>
-<div class="col-span-2">
-    <!-- Espaço para anúncios -->
-    <div class="bg-yellow-200 p-4 rounded mt-4">
-        <h3 class="text-lg font-bold">Anúncios</h3>
-        <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p>
+        
+        <div class="square square-bottom" style="margin-top: auto;">
+            
+        </div>
+        
     </div>
 </div>
 
-<style>
-   
-    #iconeDiv img {
-        max-width: 100%;
-        max-height: 100%;
-    }
-</style>
+<div>
+     
+</div>
+
+@* <div class="grid grid-cols-12 gap-4"/> *@
+@* <div class="col-span-2 "> *@
+@*     <div class="bg-gray-general p-4 rounded mt-4 "> *@
+@*         <h3 class="text-lg font-bold ">Comunidades Populares</h3> *@
+@*         <ul class="mt-2"> *@
+@*         </ul> *@
+@*     </div> *@
+@* </div> *@
+@* <div class="col-span-8"> *@
+@*     <div class="timeline"> *@
+@*         <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4"> *@
+@*             <div class="flex items-center justify-between mb-2"> *@
+@*                 <p> *@
+@*                     <strong>Fórum Universitário @ViewData["HideNavBar"]</strong> *@
+@*                 </p> *@
+@*                 <p class="text-gray-500">A qualquer momento</p> *@
+@*             </div> *@
+@*             <h3 class="text-lg font-bold">O melhor lugar para compartilhar, se divertir </h3> *@
+@*             <p class="mt-2">E se conectar!</p> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
+@* <div class="col-span-2"> *@
+@*     <!-- Espaço para anúncios --> *@
+@*     <div class="bg-yellow-200 p-4 rounded mt-4"> *@
+@*         <h3 class="text-lg font-bold">Anúncios</h3> *@
+@*         <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p> *@
+@*     </div> *@
+@* </div> *@

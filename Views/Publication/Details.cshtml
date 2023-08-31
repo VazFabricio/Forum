@@ -6,7 +6,7 @@
 
 @functions {
 
-    void RenderComments(List<ForumUniversitario.Entidades.Comment> comments, int depth = 0)
+    async Task RenderComments(List<ForumUniversitario.Entidades.Comment> comments, int depth = 0)
     {
         foreach (var comment in comments)
         {
@@ -18,10 +18,13 @@
                     </div>
                     <p class="comment-text">@comment.Content</p>
                     <p class="comment-text">@comment.Id</p>
+
                     <div class="comment-actions">
-                        <a href="@Url.Action("Create", "Comment", new { publicationId = Model.Id, fatherCommentId = @comment.Id })">
-                            <i class="gg-comment"></i>
-                        </a>
+
+                        <form id="commentForm-@Model.Id">
+                            <input type="text" id="commentText" placeholder="Digite seu comentário...">
+                            <button type="button" class="comment-button" data-publication-id="@Model.Id" data-father-comment-id="@comment.ParentId">Comentar</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -36,7 +39,7 @@
 }
 
 <div class="container mx-auto p-4">
-    <div class="bg-white p-4 rounded shadow mb-4">
+    <div class="bg-gray-general-lighter p-4 rounded green-aura mt-5 mb-5">
         <div class="flex items-center justify-between mb-2">
             <p class="text-gray-500">@ViewData["UserNamePublication"]</p>
             <p class="text-gray-500">@Model.CreatedAt</p>
@@ -44,12 +47,6 @@
         </div>
         <h3 class="text-lg font-bold">@Model.Title</h3>
         <p class="mt-2">@Model.Content</p>
-            <div class="mt-4">
-                <a href="@Url.Action("Create", "Comment", new { publicationId = Model.Id })">
-                    <i class="gg-comment"></i>
-                </a>
-            </div>
-
     </div>
 
     @if (ViewBag.AllComments != null)
@@ -59,3 +56,30 @@
 
 
 </div>
+
+<script >
+$(".comment-button").click(function (event) {
+    var $commentButton = $(this);
+    var publicationId = $commentButton.data("publication-id");
+    var parentId = $commentButton.data("father-comment-id");
+    var commentText = $("#commentText").val();
+
+    var comment = new Comment();
+    comment.content = "teste";
+    comment.publicationId = publicationId;
+    comment.parentId = parentId;
+
+    $.ajax({
+        type: "POST",
+        url: `/Comment/CreateComment/${publicationId}/${parentId}/${commentText}`,
+        contentType: "application/json",
+        data: JSON.stringify(comment),
+        success: function (response) {
+            //Dps adicionar msg de comentário criado
+        },
+        error: function (xhr, status, error) {
+            alert("Erro ao criar comentário: " + error.responseJSON);
+        }
+    });
+});
+</script>

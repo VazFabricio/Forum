@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForumUniversitario.Controllers
 {
-    [Authorize]
+  [Authorize]
     public class PublicationController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -45,7 +45,7 @@ namespace ForumUniversitario.Controllers
             ViewData["UserName"] = user.AccountName;
             
 
-            var publications = _publicationModel.getPublications();
+            var publications = _publicationModel.GetPublications();
 
             // Inclui o usuário associado à publicação.ToListAsync();
             string nomeUsuario = user.AccountName;
@@ -91,7 +91,7 @@ namespace ForumUniversitario.Controllers
                 }
             }
 
-            bool isAbleToPost = _publicationModel.isAbleToPost(_userManager.GetUserId(this.User), 30);
+            bool isAbleToPost = _publicationModel.IsAbleToPost(_userManager.GetUserId(this.User), 30);
 
             if (!isAbleToPost)
             {
@@ -170,6 +170,15 @@ namespace ForumUniversitario.Controllers
             return Ok(); 
         }
         
+        [HttpGet("/publication/{id}/isliked")]
+        public IActionResult IsPublicationLiked(int id)
+        {
+            var userId = _userManager.GetUserId(this.User);
+            var isLiked = _likeModel.IsPublicationLiked(userId, id);
+            return Ok(isLiked);
+        }
+        
+
 
     }
 }

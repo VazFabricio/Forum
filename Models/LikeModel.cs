@@ -28,12 +28,26 @@ public class LikeModel : Like
         return db.LIKES.FirstOrDefault(l => l.UserId == userId && l.PublicationId == publicationId);
     }
 
+    public bool IsPublicationLiked(string userId, int publicationId)
+    {
+        var  like = db.LIKES.FirstOrDefault(l => l.UserId == userId && l.PublicationId == publicationId);
+
+        if (like == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public void AddLike(string userId, int publicationId)
     {
         var like = new Like
         {
             UserId = userId,
-            PublicationId = publicationId
+            PublicationId = publicationId,
+            LikedAt = DateTime.Now
+            
         };
 
         db.LIKES.Add(like);

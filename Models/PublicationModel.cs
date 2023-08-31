@@ -9,34 +9,33 @@ namespace ForumUniversitario.Models
 {
     public class PublicationModel : Publication
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<ForumUniversitarioUser> _userManager;
-        private readonly ForumUniversitarioContext db;
+
+        private readonly ForumUniversitarioContext _db;
 
         public PublicationModel(ForumUniversitarioContext contexto)
         {
-            db = contexto;
+            _db = contexto;
         }
 
-        public List<Publication> getPublications()
+        public List<Publication> GetPublications()
         {
             var publications =
-                db.PUBLICATION.Include(p => p.User).Include(p => p.Community)
+                _db.PUBLICATION.Include(p => p.User).Include(p => p.Community)
                     .ToList();
 
             return publications;
         }
 
-        public bool isAbleToPost(string userId, int SecondsBetweenPosts)
+        public bool IsAbleToPost(string userId, int secondsBetweenPosts)
         {
 
-            var lastPost = db.PUBLICATION.Where(p => p.UserId == userId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
+            var lastPost = _db.PUBLICATION.Where(p => p.UserId == userId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
 
             if (lastPost != null)
             {
                 // Verificar se já se passaram 30 segundos
                 TimeSpan elapsedTime = DateTime.Now - lastPost.CreatedAt;
-                if (elapsedTime.TotalSeconds < SecondsBetweenPosts)
+                if (elapsedTime.TotalSeconds < secondsBetweenPosts)
                 {
                     return false;
                 }
@@ -49,7 +48,7 @@ namespace ForumUniversitario.Models
 
         public Community GetCommunityByName(string communityName)
         {
-            return db.COMMUNITY.FirstOrDefault(c => c.Name == communityName);
+            return _db.COMMUNITY.FirstOrDefault(c => c.Name == communityName);
         }
 
         public void SavePublication(Publication publication, int communityId, string UserId)
@@ -58,20 +57,20 @@ namespace ForumUniversitario.Models
             publication.CreatedAt = DateTime.Now;
             publication.CommunityId = communityId;
 
-            db.PUBLICATION.Add(publication);
-            db.SaveChanges();
+            _db.PUBLICATION.Add(publication);
+            _db.SaveChanges();
         }
 
         public Publication GetPublicationById(int? id)
         {
-            return db.PUBLICATION.FirstOrDefault(p => p.Id == id);
+            return _db.PUBLICATION.FirstOrDefault(p => p.Id == id);
         }
 
 
 
         public ForumUniversitarioUser GetUserByPublicationId(int publicationId)
         {
-            var publication = db.PUBLICATION
+            var publication = _db.PUBLICATION
                 .Include(p => p.User) // Carrega informações do usuário
                 .FirstOrDefault(p => p.Id == publicationId);
 
@@ -84,8 +83,8 @@ namespace ForumUniversitario.Models
 
         public void UpdatePublication(Publication publication)
         {
-            db.PUBLICATION.Update(publication);
-            db.SaveChanges();
+            _db.PUBLICATION.Update(publication);
+            _db.SaveChanges();
         }
 
     }

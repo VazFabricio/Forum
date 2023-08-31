@@ -10,18 +10,18 @@
     <div class="col-10">
         <section>
             <form id="account" method="post">
-                <h2>Welcome back!</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <h2>Bem-vindo de volta!</h2>
+                <hr class="mt-1"/>
+                <div asp-validation-summary="ModelOnly" class="text-danger " role="alert"></div>
 
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.Email" class="form-control bg-gray-general-lighter" autocomplete="username" aria-required="true" />
                     <label asp-for="Input.Email" class="form-label">Email</label>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-control bg-gray-general-lighter" autocomplete="current-password" aria-required="true"/>
+                    <label asp-for="Input.Password" class="form-label">Senha</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="checkbox mb-3">
@@ -31,12 +31,37 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary gradient-azul">Login</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
+
+<style>
+    .form-control {
+        background-color:  rgb(80, 80, 80); /* Define a cor de fundo desejada */
+        color: white; /* Define a cor do texto para branco */
+        /* Outros estilos de form-control */
+    }
+    
+    .form-control:focus {
+        background-color:  rgb(80, 80, 80); /* Mantém a mesma cor de fundo para o estado de foco */
+        color: white; /* Mantém a cor do texto para branco no estado de foco */
+        /* Outros estilos para o estado de foco */
+    }
+    
+    .gradient-azul {
+        background: linear-gradient(to bottom right, #007BFFFF, #007B56FF);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+
+    }
+</style>
 
 
 @section Scripts {

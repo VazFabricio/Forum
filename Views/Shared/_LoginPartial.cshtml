@@ -5,25 +5,40 @@
 @inject UserManager<ForumUniversitarioUser> UserManager
 
 <div class="nav-vertical ">
-    <ul class="nav flex-column font-color-white bg-gray-general bg-gray-general p-4 rounded mt-4">
+    <ul class="nav flex-column font-color-white menu-box p-4 rounded mt-4">
         @if (SignInManager.IsSignedIn(User))
         {
             <li class="nav-item">
-                <a id="manage" class="my-nav-link  font-color-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar">Olá @ViewData["UserName"] !</a>
+                <a id="manage" class="my-nav-link  font-color-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar">Olá @ViewData["UserName"]!</a>
             </li>
-            <li class="nav-item">
-                <a class="my-nav-link font-color-white" asp-area="" asp-controller="Community" asp-action="Index">Comunidades</a>
+            
+            <li class="nav-item flex mt-3">
+                <a class="my-nav-link font-color-white " asp-area="" asp-controller="Publication" asp-action="Index">
+                    <div class="flex gap-2 align-items-center">
+                        <img src="\Icons/publications.svg" alt="Publicações">
+                        <span>Publicações</span>
+                    </div>
+                </a>
             </li>
-            <li class="nav-item">
-                <a class="my-nav-link font-color-white " asp-area="" asp-controller="Publication" asp-action="Index">Publicações</a>
+            
+            <li class="nav-item flex mt-2">
+                <a class="my-nav-link font-color-white" asp-area="" asp-controller="Community" asp-action="Index">
+                    <div class="flex gap-1 align-items-center">
+                        <img src="\Icons/community.svg" alt="Comunidades">
+                        <span>Comunidades</span>
+                    </div>
+                </a>
             </li>
-            <li class="nav-item">
-                <a class="my-nav-link font-color-white" asp-area="" asp-controller="Comment" asp-action="Index">Comentários</a>
-            </li>
-            <li class="nav-item">
-                <form id="logoutForm" class="form-inline font-color-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="my-nav-link">Sair</button>
-                </form>
+            
+            <li class="nav-item flex mt-2">
+                <div class="flex align-items-center">
+                    <form id="logoutForm" class="form-inline font-color-white flex" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="my-nav-link flex gap-2">
+                            <img src="\Icons/logout.svg" alt="Sair">
+                            <span>Sair</span>
+                        </button>
+                    </form>
+                </div>
             </li>
         }
         else
@@ -37,5 +52,6 @@
         }
     </ul>
 </div>
+
 
 

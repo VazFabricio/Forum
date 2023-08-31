@@ -7,73 +7,84 @@
 }
 
 <div class="container mx-auto p-1 mt-3">
+    <div class="row">
 
-    @* <p> *@
-    @*     <a asp-action="Create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nova Publicação</a> *@
-    @* </p> *@
-
-    <div class="grid grid-cols-12 gap-4">
-
-
-        <div class="col-span-2 ">
+        <div class="col-md-2 col-xl-2 col-lg-12">
             <div class="mt-3">@Html.Partial("_LoginPartial")</div>
             <div class="bg-gray-general p-4 rounded mt-4">
                 <h3 class="text-lg font-bold">Top 3 Usuários com Mais Postagens</h3>
                 <ul class="mt-2">
                     @foreach (var userGroup in Model.GroupBy(p => p.UserId).OrderByDescending(g => g.Count()).Take(3))
                     {
-                        //alterar para que esses usuários sejam armazenados no controller para aliviar o frontend.
                         var user = userGroup.First().User;
-                        <li>@user.UserName - @userGroup.Count() postagens</li>
+                        <li class="text-wrap">@user.AccountName - @userGroup.Count() Posts</li>
                     }
                 </ul>
             </div>
-
         </div>
 
-        <div class="col-span-8">
-               
+
+        <div class="col-md-8">
             <div class="timeline mt-4">
                 <div class="create-post-button bg-gray-general">
-                    <div class="button-border  bg-gray-general-lighter">
-                        <div class="button-content">
-                            <button id="openCreateModalBtn" class="">Criar Publicação</button>
+                    <div class="button-border bg-gray-general-lighter">
+                        <div class="button-content flex items-center">
+                            <button id="openCreateModalBtn" class="font-color-white flex align-items-center">
+                                <img src="Icons/createPublication.svg" alt="">
+                                <span class="p-1">Criar Publicação</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 @foreach (var publicacao in Model)
                 {
-                    <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4">
-                        <div class="flex items-center justify-between mb-2">
+                   
+                    <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4  remove-link-styles">
+                     <a asp-action="Details" asp-route-id="@publicacao.Id">
+                        <div class="d-flex justify-content-between mb-2">
                             <p>
                                 @publicacao.User.AccountName • <span class="small-font roboto-font text-gray-500"> Postado em @publicacao.Community.Name</span>
                             </p>
                             <p class="text-gray-500">@publicacao.CreatedAt</p>
                         </div>
                         <h3 class="text-2xl font-bold ">
-                            <a asp-action="Details" asp-route-id="@publicacao.Id">@publicacao.Title</a>
+                            @publicacao.Title
                         </h3>
                         <p class="mt-2">@publicacao.Content</p>
-                        <p>Comunidade: @publicacao.Community.Name</p>
+                       
                         <br/>
-                        <div class="flex items-center gap-4">
+                        <div class="d-flex align-items-center gap-4">
                             <a href="#" data-publication-id="@publicacao.Id" class="like-button">
                                 <img src="\Icons\heart.svg" alt="like"> 
                             </a>
-                        @* ABRIR A MODAL DE COMENTAR *@
+                            <div class="like-status" data-publication-id="@publicacao.Id"></div>   
+                            @* ABRIR A MODAL DE COMENTAR *@
                             <a asp-action="Details" asp-route-id="@publicacao.Id">
                                 <img src="\Icons\message_square.svg" alt="comentar">
                             </a>
+                            
                         </div>
+                        
+                       
+    <div>
+        <form id="commentForm-@publicacao.Id">
+            <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário...">
+            <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
+        </form>
+    </div>
+
+                                    
+                     </a>
                     </div>
+                    
                 }
             </div>
         </div>
 
-        <div class="col-span-2">
+        <div class="col-md-2">
             <!-- Espaço para anúncios -->
-            <div class="bg-yellow-200 p-4 rounded mt-4">
+            <div class="border-1 p-4 rounded mt-4">
                 <h3 class="text-lg font-bold">Anúncios</h3>
                 <p class="mt-2">Espaço reservado para futuramente adicionar anúncios.</p>
             </div>
@@ -83,7 +94,7 @@
 
 <div id="createModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content bg-gray-general">
             <div class="modal-header">
                 <h5 class="modal-title">Criar Publicação</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -99,33 +110,98 @@
 
 
 <script>
-$(document).ready(function () {
+    
+$(".comment-button").click(function (event) {
+    var $commentButton = $(this);
+    var publicationId = $commentButton.data("publication-id");
+    var commentText = $("#commentText-" + publicationId).val();
+
+    var comment = {
+        content: commentText
+    };
+
+    $.ajax({
+        type: "POST",
+        url: `/Comment/CreateComment/${publicationId}/null`,
+        contentType: "application/json",
+        data: JSON.stringify(comment),
+        success: function (response) {
+            alert(response); // Mensagem de sucesso (você pode personalizar isso)
+            $("#commentText-" + publicationId).val(""); // Limpa o campo de comentário
+            // Você também pode adicionar lógica aqui para exibir o novo comentário na página
+        },
+        error: function (xhr, status, error) {
+            alert("Erro ao criar comentário: " + error.responseJSON);
+        }
+    });
+});
+    
     $("#openCreateModalBtn").click(function () {
         $.get("/Publication/Create", function (data) {
             $("#createModal .modal-body").html(data);
             $("#createModal").modal("show");
         });
     });
-
-
-    // Like button click handler
-    $(".like-button").click(function (event) {
-            event.preventDefault();
     
-            var publicationId = $(this).data("publication-id");
-            var url = "/Publication/LikePublication/" + publicationId;
+
+$(document).ready(function () {
+    // Verificação inicial de curtida para cada botão
+    $(".like-button").each(function () {
+        var $likeButton = $(this);
+        var publicationId = $likeButton.data("publication-id");
+        var checkLikeUrl = "/Publication/" + publicationId + "/isliked";
+        var $iconImage = $likeButton.find("img");
+
+        $.ajax({
+            type: "GET",
+            url: checkLikeUrl,
+            success: function (isLiked) {
+                if (isLiked) {
+                    $iconImage.attr("src", "/Icons/heart_liked.svg");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Erro ao verificar curtida:", error);
+            }
+        });
+    });
     
+
+$(".like-button").click(function (event) {
+
+    event.preventDefault();
+
+    var $likeButton = $(this);
+    var publicationId = $likeButton.data("publication-id");
+    var likeUrl = "/Publication/LikePublication/" + publicationId;
+    var checkLikeUrl = "/Publication/" + publicationId + "/isliked";
+
+    $.ajax({
+        type: "POST",
+        url: likeUrl,
+        success: function () {
+            // Após curtir/descurtir, faça uma chamada AJAX para atualizar o status de curtida
             $.ajax({
-                type: "POST",
-                url: url,
-                success: function () {
-                    
+                type: "GET",
+                url: checkLikeUrl,
+                success: function (isLiked) {
+                    var $iconImage = $likeButton.find("img");
+
+                    if (isLiked) {
+                        $iconImage.attr("src", "/Icons/heart_liked.svg");
+                    } else {
+                        $iconImage.attr("src", "/Icons/heart.svg");
+                    }
                 },
                 error: function (xhr, status, error) {
-                    console.log("Erro ao curtir a publicação:", error);
+                    console.log("Erro ao verificar curtida:", error);
                 }
             });
+        },
+        error: function (xhr, status, error) {
+            console.log("Erro ao curtir a publicação:", error);
+        }
+        });
     });
-
-});
+    });
 </script>
