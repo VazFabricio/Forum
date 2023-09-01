@@ -75,33 +75,36 @@ namespace ForumUniversitario.Controllers
             return RedirectToAction("Details", "Publication", new { id = publicationId });
         }
         
+        
         [HttpPost]
-        [Route("Comment/CreateComment/{publicationId}/{fatherCommentId}/{content}")]
-        public IActionResult CreateComment(int publicationId, int? fatherCommentId, string content)
+        [Route("Comment/CreateComment")]
+        public IActionResult CreateComment([FromBody] Comment comment)
         {
+            
             // Verificar se a publicação existe (sugestão: use um serviço ou repositório para verificar)
-            var publication = _publicationModel.GetPublicationById(publicationId);
+            var publication = _publicationModel.GetPublicationById(comment.PublicationId);
             if (publication == null)
             {
                 return NotFound("Publicação não encontrada");
             }
 
+
+            if (comment.Content == "")
+            {
+                return NotFound("Comentário sem conteúdo");
+            }
+
             // Se fatherCommentId for fornecido, verifique se o comentário pai existe
             Comment fatherComment = null;
-            if (fatherCommentId.HasValue)
+            if (comment.ParentId.HasValue)
             {
-                fatherComment = _commentModel.GetCommentById(fatherCommentId.Value);
+                fatherComment = _commentModel.GetCommentById(comment.ParentId);
                 if (fatherComment == null)
                 {
                     return NotFound("Comentário pai não encontrado");
                 }
             }
 
-            // Criar um novo comentário
-            Comment comment = new Comment();
-            comment.Content = content;
-            comment.PublicationId = publicationId;
-            comment.ParentId = fatherCommentId;
 
             // Salvar o comentário no banco de dados
             _commentModel.SaveComment(comment, _userManager.GetUserId(this.User));

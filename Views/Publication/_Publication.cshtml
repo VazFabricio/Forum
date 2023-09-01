@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "UniSync";
-    
+
 }
 
 <div class="container mx-auto p-1 mt-3">
@@ -39,45 +39,43 @@
 
                 @foreach (var publicacao in Model)
                 {
-                   
                     <div class="bg-gray-general p-4 rounded shadow mb-4 mt-4  remove-link-styles">
-                     <a asp-action="Details" asp-route-id="@publicacao.Id">
-                        <div class="d-flex justify-content-between mb-2">
-                            <p>
-                                @publicacao.User.AccountName • <span class="small-font roboto-font text-gray-500"> Postado em @publicacao.Community.Name</span>
-                            </p>
-                            <p class="text-gray-500">@publicacao.CreatedAt</p>
-                        </div>
-                        <h3 class="text-2xl font-bold ">
-                            @publicacao.Title
-                        </h3>
-                        <p class="mt-2">@publicacao.Content</p>
-                       
-                        <br/>
-                        <div class="d-flex align-items-center gap-4">
-                            <a href="#" data-publication-id="@publicacao.Id" class="like-button">
-                                <img src="\Icons\heart.svg" alt="like"> 
-                            </a>
-                            <div class="like-status" data-publication-id="@publicacao.Id"></div>   
-                            @* ABRIR A MODAL DE COMENTAR *@
-                            <a asp-action="Details" asp-route-id="@publicacao.Id">
-                                <img src="\Icons\message_square.svg" alt="comentar">
-                            </a>
-                            
-                        </div>
-                        
-                       
-    <div>
-        <form id="commentForm-@publicacao.Id">
-            <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário...">
-            <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
-        </form>
-    </div>
+                        <a asp-action="Details" asp-route-id="@publicacao.Id">
+                            <div class="d-flex justify-content-between mb-2">
+                                <p>
+                                    @publicacao.User.AccountName • <span class="small-font roboto-font text-gray-500"> Postado em @publicacao.Community.Name</span>
+                                </p>
+                                <p class="text-gray-500">@publicacao.CreatedAt</p>
+                            </div>
+                            <h3 class="text-2xl font-bold ">
+                                @publicacao.Title
+                            </h3>
+                            <p class="mt-2">@publicacao.Content</p>
 
-                                    
-                     </a>
+                            <br/>
+                            <div class="d-flex align-items-center gap-4">
+                                <a href="#" data-publication-id="@publicacao.Id" class="like-button">
+                                    <img src="\Icons\heart.svg" alt="like">
+                                </a>
+                                <div class="like-status" data-publication-id="@publicacao.Id"></div>
+                                @* ABRIR A MODAL DE COMENTAR *@
+                                <button class="show-comment-button mt-4" data-publication-id="@publicacao.Id">
+                                    <img src="\Icons\message_square.svg" alt="comentar">
+                                </button>
+
+                            </div>
+
+                            <br/>
+
+                            <div class=" mt-4 comment-box comment-box-@publicacao.Id">
+                                <form id="commentForm-@publicacao.Id">
+                                    <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário...">
+                                    <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
+                                </form>
+                            </div>
+
+                        </a>
                     </div>
-                    
                 }
             </div>
         </div>
@@ -108,16 +106,30 @@
     </div>
 </div>
 
+<style>
+textarea:focus, input:focus {
+    outline: none;
+}
+</style>
+
 
 <script>
-    
+
+$(document).ready(function () {
+    $(".show-comment-button").click(function () {
+        var publicationId = $(this).data("publication-id");
+        $(".comment-box-" + publicationId).show();
+        $(this).hide();
+    });
 $(".comment-button").click(function (event) {
     var $commentButton = $(this);
     var publicationId = $commentButton.data("publication-id");
     var commentText = $("#commentText-" + publicationId).val();
 
     var comment = {
-        content: commentText
+        content: commentText,
+        publicationId: publicationId,
+         parentId: null
     };
 
     $.ajax({
@@ -134,6 +146,7 @@ $(".comment-button").click(function (event) {
             alert("Erro ao criar comentário: " + error.responseJSON);
         }
     });
+});
 });
     
     $("#openCreateModalBtn").click(function () {

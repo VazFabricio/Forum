@@ -19,12 +19,16 @@
                     <p class="comment-text">@comment.Content</p>
                     <p class="comment-text">@comment.Id</p>
 
-                    <div class="comment-actions">
+                    <button class="show-comment-button mt-4" data-comment-id="@comment.Id">
+                        <img src="\Icons\message_square.svg" alt="comentar">
+                    </button>
+                    <div class=" mt-4 comment-box comment-box-@comment.Id">
+                        <form id="commentForm-@comment.Id">
+                            <textarea class="bg-gray-general-lighter p-1 rounded-10px" id="commentText-@comment.Id" rows="3" cols="80" placeholder="Digite seu comentário..."></textarea>
 
-                        <form id="commentForm-@Model.Id">
-                            <input type="text" id="commentText" placeholder="Digite seu comentário...">
-                            <button type="button" class="comment-button" data-publication-id="@Model.Id" data-father-comment-id="@comment.ParentId">Comentar</button>
+                            <button type="button" class="comment-button" data-publication-id="@Model.Id" data-comment-id="@comment.Id">Enviar</button>
                         </form>
+                        <span class="text-danger" id="commentError-@comment.Id"></span> <!-- Novo elemento para a mensagem de erro -->
                     </div>
                 </div>
             </div>
@@ -54,32 +58,52 @@
         RenderComments(ViewBag.AllComments);
     }
 
-
 </div>
 
 <script >
-$(".comment-button").click(function (event) {
-    var $commentButton = $(this);
-    var publicationId = $commentButton.data("publication-id");
-    var parentId = $commentButton.data("father-comment-id");
-    var commentText = $("#commentText").val();
 
-    var comment = new Comment();
-    comment.content = "teste";
-    comment.publicationId = publicationId;
-    comment.parentId = parentId;
-
-    $.ajax({
-        type: "POST",
-        url: `/Comment/CreateComment/${publicationId}/${parentId}/${commentText}`,
-        contentType: "application/json",
-        data: JSON.stringify(comment),
-        success: function (response) {
-            //Dps adicionar msg de comentário criado
-        },
-        error: function (xhr, status, error) {
-            alert("Erro ao criar comentário: " + error.responseJSON);
-        }
+$(document).ready(function () {
+    $(".show-comment-button").click(function () {
+        var parentId = $(this).data("comment-id");
+        $(".comment-box-" + parentId).show();
+        $(this).hide();
     });
-});
+
+    $(".comment-button").click(function (event) {
+        var $commentButton = $(this);
+        var parentId = $commentButton.data("comment-id");
+        var content = $("#commentText-" + parentId).val();
+        var publicationId = $commentButton.data("publication-id")
+
+        var errorElement = $("#commentError-" + parentId); // Elemento para exibir a mensagem de erro
+
+        if (content.length < 10) {
+            errorElement.text("O comentário deve ter mais de 10 caracteres.");
+            return; // Impede o envio do comentário
+        } else {
+            errorElement.text(""); // Limpa a mensagem de erro se o conteúdo for válido
+        }
+           
+            var comment = {
+                content: content,
+                publicationId: publicationId,
+                parentId: parentId
+            };
+        
+         $.ajax({
+             type: "POST",
+             url: `/Comment/CreateComment`, // Ajuste a URL conforme necessário
+             contentType: "application/json",
+             data: JSON.stringify(comment),
+             success: function (response) {
+                 alert(response);
+                 $("#commentText-" + parentId).val("");
+             },
+             error: function (xhr, status, error) {
+                 alert("Erro ao criar comentário: " + error.responseJSON);
+             }
+         });
+     });
+  });
+
 </script>

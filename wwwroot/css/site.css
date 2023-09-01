@@ -466,3 +466,11 @@ width: 25%;
     text-decoration: none; /* Mantém o sublinhado removido ao passar o mouse */
     color: inherit; /* Mantém a cor de texto herdada ao passar o mouse */
 }
+
+.comment-box {
+    display: none;
+}
+
+/*textarea:focus, input:focus {*/
+/*    outline: white; !important;*/
+/*}*/
