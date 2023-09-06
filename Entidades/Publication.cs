@@ -19,8 +19,7 @@ namespace ForumUniversitario.Entidades
         public string Content { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        // Propriedade que representa o relacionamento com o usuário
+        
         public string UserId { get; set; }
 
         [NotMapped]

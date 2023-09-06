@@ -10,19 +10,16 @@ namespace ForumUniversitario.Controllers
     public class CommentController : Controller
     {
 
-
-        private readonly ILogger<HomeController> _logger;
+        
         private readonly UserManager<ForumUniversitarioUser> _userManager;
-        private readonly ForumUniversitarioContext db;
         private readonly CommentModel _commentModel;
         private readonly PublicationModel _publicationModel;
 
-        public CommentController(ForumUniversitarioContext contexto,
+        public CommentController(
             UserManager<ForumUniversitarioUser> userManager,
             CommentModel commentModel,
             PublicationModel publicationModel)
         {
-            db = contexto;
             this._userManager = userManager;
             _commentModel = commentModel;
             _publicationModel = publicationModel;
@@ -96,6 +93,7 @@ namespace ForumUniversitario.Controllers
 
             // Se fatherCommentId for fornecido, verifique se o comentário pai existe
             Comment fatherComment = null;
+            
             if (comment.ParentId.HasValue)
             {
                 fatherComment = _commentModel.GetCommentById(comment.ParentId);

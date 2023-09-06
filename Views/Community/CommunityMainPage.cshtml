@@ -18,13 +18,14 @@
 <div class=" w-full height-5em flex bg-gray-general justify-center no-margin">
 
     <h2>@ViewData["CommunityName"]</h2>
-
-    <p>
+    
+    <div class="mt-5">
         <strong>Descrição:</strong> @ViewData["CommunityDesc"]
-    </p>
-    <p>
+    </div>
+    
+    <div>
         <strong>Data de Criação:</strong> @ViewData["CommunityCreatedAt"]
-    </p>
+    </div>
 
     <div id="followButtonContainer">
         @if (User.Identity.IsAuthenticated)

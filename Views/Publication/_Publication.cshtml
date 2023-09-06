@@ -1,5 +1,4 @@
-﻿@using ForumUniversitario.Entidades
-@model IEnumerable<ForumUniversitario.Entidades.Publication>
+﻿@model IEnumerable<ForumUniversitario.Entidades.Publication>
 
 @{
     ViewData["Title"] = "UniSync";
@@ -59,7 +58,7 @@
                                 </a>
                                 <div class="like-status" data-publication-id="@publicacao.Id"></div>
                                 @* ABRIR A MODAL DE COMENTAR *@
-                                <button class="show-comment-button mt-4" data-publication-id="@publicacao.Id">
+                                <button class="show-comment-button" data-publication-id="@publicacao.Id">
                                     <img src="\Icons\message_square.svg" alt="comentar">
                                 </button>
 
@@ -68,8 +67,9 @@
                             <br/>
 
                             <div class=" mt-4 comment-box comment-box-@publicacao.Id">
-                                <form id="commentForm-@publicacao.Id">
-                                    <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário...">
+                                <form  id="commentForm-@publicacao.Id">
+                                    @* <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário..."> *@
+                                    <textarea class="bg-gray-general-lighter p-1 rounded-10px" id="commentText-@publicacao.Id" cols="100" rows="3" placeholder="Digite seu comentário..."></textarea>
                                     <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
                                 </form>
                             </div>
@@ -108,113 +108,118 @@
 
 <style>
 textarea:focus, input:focus {
-    outline: none;
+outline: none;
 }
 </style>
 
 
 <script>
-
 $(document).ready(function () {
+    
     $(".show-comment-button").click(function () {
-        var publicationId = $(this).data("publication-id");
-        $(".comment-box-" + publicationId).show();
-        $(this).hide();
-    });
-$(".comment-button").click(function (event) {
-    var $commentButton = $(this);
-    var publicationId = $commentButton.data("publication-id");
-    var commentText = $("#commentText-" + publicationId).val();
+    var publicationId = $(this).data("publication-id");
+    $(".comment-box-" + publicationId).show();  
+    $(this).hide();
+}); 
+    $(".comment-button").click(function (event) {
+        var $commentButton = $(this);
+        var publicationId = $commentButton.data("publication-id");
+        var content = $("#commentText-" + publicationId).val();
 
-    var comment = {
-        content: commentText,
+        // if (content.length < 10) {
+        //     errorElement.text("O comentário deve ter mais de 10 caracteres.");
+        //     return; // Impede o envio do comentário
+        // } else {
+        //     errorElement.text(""); // Limpa a mensagem de erro se o conteúdo for válido
+        // }
+        
+        var comment = {
+        content: content,
         publicationId: publicationId,
-         parentId: null
-    };
-
-    $.ajax({
-        type: "POST",
-        url: `/Comment/CreateComment/${publicationId}/null`,
-        contentType: "application/json",
-        data: JSON.stringify(comment),
-        success: function (response) {
-            alert(response); // Mensagem de sucesso (você pode personalizar isso)
-            $("#commentText-" + publicationId).val(""); // Limpa o campo de comentário
-            // Você também pode adicionar lógica aqui para exibir o novo comentário na página
+        parentId: null
+        };
+        
+        $.ajax({
+            type: "POST",
+            url: `/Comment/CreateComment`, // Ajuste a URL conforme necessário
+            contentType: "application/json",
+            data: JSON.stringify(comment),
+            success: function (response) {
+            alert(response);
+            $("#commentText-" + publicationId).val("");
         },
-        error: function (xhr, status, error) {
+            error: function (xhr, status, error) {
             alert("Erro ao criar comentário: " + error.responseJSON);
         }
-    });
-});
-});
-    
-    $("#openCreateModalBtn").click(function () {
-        $.get("/Publication/Create", function (data) {
-            $("#createModal .modal-body").html(data);
-            $("#createModal").modal("show");
         });
     });
-    
+});
+
+$("#openCreateModalBtn").click(function () {
+    $.get("/Publication/Create", function (data) {
+    $("#createModal .modal-body").html(data);
+    $("#createModal").modal("show");
+        });
+    });
 
 $(document).ready(function () {
     // Verificação inicial de curtida para cada botão
     $(".like-button").each(function () {
-        var $likeButton = $(this);
-        var publicationId = $likeButton.data("publication-id");
-        var checkLikeUrl = "/Publication/" + publicationId + "/isliked";
-        var $iconImage = $likeButton.find("img");
-
-        $.ajax({
-            type: "GET",
-            url: checkLikeUrl,
-            success: function (isLiked) {
-                if (isLiked) {
-                    $iconImage.attr("src", "/Icons/heart_liked.svg");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Erro ao verificar curtida:", error);
-            }
+    var $likeButton = $(this);
+    var publicationId = $likeButton.data("publication-id");
+    var checkLikeUrl = "/Publication/" + publicationId + "/isliked";
+    var $iconImage = $likeButton.find("img");
+    
+    $.ajax({
+        type: "GET",
+        url: checkLikeUrl,
+        success: function (isLiked) {
+        if (isLiked) {
+        $iconImage.attr("src", "/Icons/heart_liked.svg");
+        }
+        },
+        error: function (xhr, status, error) {
+        console.log("Erro ao verificar curtida:", error);
+        }
         });
     });
-    
 
 $(".like-button").click(function (event) {
 
     event.preventDefault();
-
+    
     var $likeButton = $(this);
     var publicationId = $likeButton.data("publication-id");
     var likeUrl = "/Publication/LikePublication/" + publicationId;
     var checkLikeUrl = "/Publication/" + publicationId + "/isliked";
-
+    
     $.ajax({
         type: "POST",
         url: likeUrl,
         success: function () {
-            // Após curtir/descurtir, faça uma chamada AJAX para atualizar o status de curtida
-            $.ajax({
-                type: "GET",
-                url: checkLikeUrl,
-                success: function (isLiked) {
-                    var $iconImage = $likeButton.find("img");
-
-                    if (isLiked) {
-                        $iconImage.attr("src", "/Icons/heart_liked.svg");
-                    } else {
-                        $iconImage.attr("src", "/Icons/heart.svg");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Erro ao verificar curtida:", error);
-                }
-            });
+        // Após curtir/descurtir, faça uma chamada AJAX para atualizar o status de curtida
+        $.ajax({
+        type: "GET",
+        url: checkLikeUrl,
+        success: function (isLiked) {
+            var $iconImage = $likeButton.find("img");
+    
+            if (isLiked) {
+            $iconImage.attr("src", "/Icons/heart_liked.svg");
+            } else {
+            $iconImage.attr("src", "/Icons/heart.svg");
+            }
         },
+            error: function (xhr, status, error) {
+            console.log("Erro ao verificar curtida:", error);
+             }
+         });
+    },
+    
         error: function (xhr, status, error) {
-            console.log("Erro ao curtir a publicação:", error);
+        console.log("Erro ao curtir a publicação:", error);
         }
         });
     });
-    });
+});
 </script>
