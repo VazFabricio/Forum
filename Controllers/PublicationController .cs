@@ -17,21 +17,21 @@ namespace ForumUniversitario.Controllers
         private readonly LikeModel _likeModel;
         private readonly CommunityModel _communityModel;
         private readonly CommentModel _commentModel;
-        private readonly ForumUniversitarioContext db;
+
 
         public PublicationController(UserManager<ForumUniversitarioUser> userManager,
             PublicationModel publicationModel,
             CommunityModel communityModel,
             CommentModel commentModel,
-            LikeModel likeModel,
-            ForumUniversitarioContext contexto)
+            LikeModel likeModel
+             )
         {
             this._userManager = userManager;
             _publicationModel = publicationModel;
             _communityModel = communityModel;
             _commentModel = commentModel;
             _likeModel = likeModel;
-            db = contexto;
+
 
         }
 

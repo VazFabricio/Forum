@@ -101,7 +101,7 @@ textarea.autosize {
 }
 
 .font-color-gray{
-    color: gray;
+    color: rgb(128, 128, 128);
 }
 
 .my-nav-link:hover {
@@ -125,6 +125,7 @@ textarea.autosize {
     /*font-family: Roboto, Arial, sans-serif;*/
     font-family: 'Quicksand', sans-serif;
     font-size: small;
+    font-weight: 600;
 }
 .register-button,
 .login-button {
@@ -431,6 +432,10 @@ textarea.autosize {
     background-color:  rgb(80, 80, 80); /* Define a cor de fundo desejada */
     color: white; /* Define a cor do texto para branco */
     /* Outros estilos de form-control */
+}
+
+#CommunityName[readonly] {
+    background-color:rgb(80, 80, 80); /* Cor de fundo quando readonly */
 }
 
 .form-control:focus {

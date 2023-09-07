@@ -18,11 +18,11 @@
 <div class=" w-full height-5em flex bg-gray-general justify-center no-margin">
 
     <h2>@ViewData["CommunityName"]</h2>
-    
+
     <div class="mt-5">
         <strong>Descrição:</strong> @ViewData["CommunityDesc"]
     </div>
-    
+
     <div>
         <strong>Data de Criação:</strong> @ViewData["CommunityCreatedAt"]
     </div>
@@ -75,15 +75,15 @@
                     <div class="create-post-button bg-gray-general">
                         <div class="button-border bg-gray-general-lighter">
                             <div class="button-content flex items-center">
-                                <button id="openCreateModalBtn" class="font-color-white flex align-items-center">
+                                <button id="openCreateModalBtn" data-community-id="@ViewData["CommunityId"]" data-community-name="@ViewData["CommunityName"]" class="font-color-white flex align-items-center">
                                     <img src="Icons/createPublication.svg" alt="">
-                                    <span class="p-1">Criar Publicação</span>
+                                    <span data-community-id="@Model.Id" class="p-1">Criar Publicação</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 }
-               
+
 
                 @foreach (var publicacao in Model.Publications)
                 {
@@ -99,13 +99,13 @@
                                 @publicacao.Title
                             </h3>
                             <p class="mt-2">@publicacao.Content</p>
-                       
+
                             <br/>
                             <div class="d-flex align-items-center gap-4">
                                 <a href="#" data-publication-id="@publicacao.Id" class="like-button">
-                                    <img src="\Icons\heart.svg" alt="like"> 
+                                    <img src="\Icons\heart.svg" alt="like">
                                 </a>
-                                <div class="like-status" data-publication-id="@publicacao.Id"></div>   
+                                <div class="like-status" data-publication-id="@publicacao.Id"></div>
                                 @* ABRIR A MODAL DE COMENTAR *@
                                 <a asp-action="Details" asp-controller="Publication" asp-route-id="@publicacao.Id">
                                     <img src="\Icons\message_square.svg" alt="comentar">
@@ -149,10 +149,13 @@
 
 $(document).ready(function () {
     $("#openCreateModalBtn").click(function () {
-        var communityId = $(this).data("community-id"); // Pega o ID da comunidade do atributo de dados
+        var communityId = $(this).data("community-id");
+        var communityName = $(this).data("community-name")
+        console.log(communityName);
+        
         $.get("/Publication/Create", { communityId: communityId }, function (data) {
             $("#createPublicationModal .modal-body").html(data);
-            // Aqui você pode preencher campos do formulário com o communityId, se necessário
+             $("#CommunityName").val(communityName);
             $("#createPublicationModal").modal("show");
         });
     });

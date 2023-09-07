@@ -67,11 +67,10 @@
                             <br/>
 
                             <div class=" mt-4 comment-box comment-box-@publicacao.Id">
-                                <form  id="commentForm-@publicacao.Id">
-                                    @* <input type="text" id="commentText-@publicacao.Id" placeholder="Digite seu comentário..."> *@
-                                    <textarea class="bg-gray-general-lighter p-1 rounded-10px" id="commentText-@publicacao.Id" cols="100" rows="3" placeholder="Digite seu comentário..."></textarea>
-                                    <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
-                                </form>
+             <form id="commentForm-@publicacao.Id">
+                        <textarea class="bg-gray-general-lighter p-1 rounded-10px w-100" id="commentText-@publicacao.Id" rows="3" placeholder="Digite seu comentário..."></textarea>
+                        <button type="button" class="comment-button" data-publication-id="@publicacao.Id">Comentar</button>
+                    </form>
                             </div>
 
                         </a>

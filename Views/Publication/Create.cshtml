@@ -31,8 +31,9 @@
             }
             else
             {
-                <input asp-for="CommunityName" class="form-control hidden " value="@ViewData["CommunityName"]" readonly/>
-                <div>@ViewData["CommunityName"]</div>
+                
+                <input asp-for="CommunityName" class="form-control" value="@ViewData["CommunityName"]" readonly/>
+               
             }
             <span asp-validation-for="CommunityName" class="text-danger bg-gray-general-lighter"></span>
         </div>

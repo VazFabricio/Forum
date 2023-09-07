@@ -53,13 +53,32 @@ namespace ForumUniversitario.Models
 
         public void SavePublication(Publication publication, int communityId, string UserId)
         {
+            
             publication.UserId = UserId;
             publication.CreatedAt = DateTime.Now;
             publication.CommunityId = communityId;
-
+        
             _db.PUBLICATION.Add(publication);
             _db.SaveChanges();
         }
+        
+        // public void SavePublication(Publication publication, int communityId, string UserId)
+        // {
+        //     
+        //     var newPublication = new Publication
+        //     {
+        //         Id = Guid.NewGuid(),
+        //         Title = publication.Title,
+        //         Content = publication.Content,
+        //         CreatedAt = DateTime.UtcNow,
+        //         UserId = publication.UserId,
+        //         CommunityId = publication.CommunityId
+        //     };
+        //     
+        //
+        //     _db.PUBLICATION.Add(newPublication);
+        //     _db.SaveChanges();
+        // }
 
         public Publication GetPublicationById(int? id)
         {
